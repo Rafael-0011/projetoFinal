@@ -19,12 +19,12 @@ Para o painel de admin: http://localhost/homeAdmin
 
 ## Caso nao tenha docker
 
-no projeto bakend executer:
+No projeto bakend executer:
 ```bash
 mvn spring-boot:run 
 ```
 
-e no projeto frontend
+E no projeto frontend
 
 ```bash
 npm install
