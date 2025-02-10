@@ -1,0 +1,82 @@
+<div class="grafico">
+  <app-chart-bar
+    [labels]="labels"
+    [datasets]="datasets"
+    class="custon_grafico_bar"
+  ></app-chart-bar>
+  <app-chart-pie
+    [labels]="labels2"
+    [datasets]="datasets2"
+    class="custon_grafico_pie"
+  ></app-chart-pie>
+</div>
+
+<div class="flex justify-content-center mt-4">
+  <p-table
+    [value]="customers"
+    [paginator]="true"
+    [rows]="5"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[5, 10, 20]"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 25%">Nome</th>
+        <th style="width: 25%">Email</th>
+        <th style="width: 25%">Função</th>
+        <th style="width: 25%">Status</th>
+        <th style="width: 25%">Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer let-i="rowIndex">
+      <tr>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.funcao }}</td>
+        <td>{{ customer.status }}</td>
+        <td>
+          <p-button (click)="openDialog(i)" label="Alterar"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  header="Analisar usuário"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '25rem' }"
+>
+  <span class="p-text-secondary block mb-1">Escolha Status</span>
+
+  <div>
+    <div class="flex items-center gap-2">
+      <p-select
+        [options]="listStatus"
+        [(ngModel)]="selectedStatus"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione o status"
+        class="w-full md:w-56"
+      ></p-select>
+      <p-button label="Alterar" (click)="alteraUse()"></p-button>
+      <p-button label="Cancelar" (click)="visible = false"></p-button>
+    </div>
+    <form [formGroup]="profileForm" class="form_space">
+      <p><strong>Nome:</strong> {{ profileForm.get("name").value }}</p>
+      <p><strong>CPF:</strong> {{ profileForm.get("cpf").value }}</p>
+      <p><strong>Nascimento:</strong> {{ profileForm.get("nascimento").value }}</p>
+      <p><strong>Email:</strong> {{ profileForm.get("email").value }}</p>
+      <p><strong>Telefone:</strong> {{ profileForm.get("telefone").value }}</p>
+      <p><strong>Função:</strong> {{ profileForm.get("funcao").value }}</p>
+      <p><strong>Escolaridade:</strong>{{ profileForm.get("escolaridadeEnum").value }}</p>
+      @for (item of itemsSnacks; track item; let i = $index) {
+      <form [formGroup]="item">
+        <p><strong>Competência:</strong> {{ item.get("competenciaEnum")?.value }}</p>
+        <p><strong>Nível: </strong>{{ item.get("nivelEnum")?.value }}</p>
+      </form>
+      }
+    </form>
+  </div>
+</p-dialog>

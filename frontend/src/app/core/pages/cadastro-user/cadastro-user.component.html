@@ -1,0 +1,31 @@
+<div class="card">
+  <h1>Criar Conta</h1>
+  <form [formGroup]="profileForm" class="form_space">
+    <div class="floatlabel_space">
+      <p-floatlabel variant="in">
+        <input
+          id="email"
+          pInputText
+          formControlName="email"
+          class="input_width"
+        />
+        <label for="email">Email</label>
+      </p-floatlabel>
+    </div>
+    <div class="floatlabel_space">
+      <p-floatlabel variant="in">
+        <input
+          id="password"
+          pInputText
+          formControlName="password"
+          class="input_width"
+        />
+        <label for="password">Password</label>
+      </p-floatlabel>
+    </div>
+    <app-button
+      [function]="cadastraUser.bind(this)"
+      text="Cadastra"
+    ></app-button>
+  </form>
+</div>

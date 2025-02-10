@@ -1,0 +1,20 @@
+<div class="card">
+  <h1>Login</h1>
+  <div class="floatlabel_space">
+    <p-floatlabel variant="in">
+      <input id="email" pInputText [(ngModel)]="loginForm.email" />
+      <label for="email">Email</label>
+    </p-floatlabel>
+  </div>
+  <div class="floatlabel_space">
+    <p-floatlabel variant="in">
+      <input id="password" pInputText [(ngModel)]="loginForm.password" />
+      <label for="password">Password</label>
+    </p-floatlabel>
+  </div>
+
+  <div class="button">
+    <app-button [function]="loginUser.bind(this)" text="Login"></app-button>
+    <app-button routerLink="/cadastro" text="criar conta"></app-button>
+  </div>
+</div>

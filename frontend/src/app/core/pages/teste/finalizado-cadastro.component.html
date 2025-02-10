@@ -1,0 +1,106 @@
+<div class="card">
+    <h1>Seus Dados</h1>
+    <form [formGroup]="profileForm" class="form_space">
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input
+            id="name"
+            pInputText
+            formControlName="name"
+            class="input_width"
+          />
+          <label for="name">Name</label>
+        </p-floatlabel>
+      </div>
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input id="cpf" pInputText formControlName="cpf" class="input_width" />
+          <label for="cpf">Cpf</label>
+        </p-floatlabel>
+      </div>
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input
+            id="nascimento"
+            pInputText
+            formControlName="nascimento"
+            class="input_width"
+          />
+          <label for="nascimento">Nascimento</label>
+        </p-floatlabel>
+      </div>
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input
+            id="email"
+            pInputText
+            formControlName="email"
+            class="input_width"
+          />
+          <label for="email">Email</label>
+        </p-floatlabel>
+      </div>
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input
+            id="telefone"
+            pInputText
+            formControlName="telefone"
+            class="input_width"
+          />
+          <label for="telefone">Telefone</label>
+        </p-floatlabel>
+      </div>
+      <div class="floatlabel_space">
+        <p-floatlabel variant="in">
+          <input
+            id="funcao"
+            pInputText
+            formControlName="funcao"
+            class="input_width"
+          />
+          <label for="funcao">Funcao</label>
+        </p-floatlabel>
+      </div>
+  
+      <div class="floatlabel_space">
+        <p-select
+          [options]="escolaridade"
+          optionLabel="label"
+          optionValue="value"
+          size="large"
+          placeholder="Escolaridade"
+          class="w-full md:w-56"
+          formControlName="escolaridadeEnum"
+          class="select_width"
+        />
+      </div>
+  
+      @for (item of itemsSnacks; track item; let i = $index) {
+      <form [formGroup]="item">
+        <div class="flex_select floatlabel_space">
+          <p-select
+            [options]="competencias"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Competencia"
+            class="w-full md:w-56"
+            formControlName="competenciaEnum"
+            class="select_competencia_width"
+          />
+          <p-select
+            [options]="niveis"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Nivel"
+            class="w-full md:w-56"
+            formControlName="nivelEnum"
+            class="select_competencia_width"
+          />
+        </div>
+      </form>
+      }
+
+    </form>
+  </div>
+  

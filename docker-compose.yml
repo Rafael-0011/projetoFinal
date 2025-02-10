@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./backend
+    environment:
+      SPRING_PROFILES.ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/backend
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2002
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy 
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2002
+      POSTGRES_DB: backend
+    healthcheck:  
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
