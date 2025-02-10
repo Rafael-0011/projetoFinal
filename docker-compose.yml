@@ -4,7 +4,7 @@ services:
   api:
     build: ./backend
     environment:
-      SPRING_PROFILES.ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/backend
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 2002
