@@ -50,7 +50,7 @@ export class FormularioCurriculoComponent implements OnInit {
       name: [''],
       cpf: [''],
       nascimento: [''],
-      email: [{ value: '', disabled: true }],
+      email: [''],
       telefone: [''],
       escolaridadeEnum: [''],
       funcao: [''],
@@ -80,14 +80,17 @@ export class FormularioCurriculoComponent implements OnInit {
   }
 
   cadastraCurriculo(): void {
-    console.log(this.profileForm.value);
+    const dadoEmail = getEmailFromToken();
 
     this.service.cadastroCurriculo(this.profileForm.value).subscribe({
       next: (response) => {
         console.log(this.profileForm.value);
         this.route.navigate(['/homeUser']);
-
         console.log(response);
+      },
+      error: (err) => {
+        console.log(err);
+        this.route.navigate(['homeUser']);
       },
     });
   }

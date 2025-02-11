@@ -126,8 +126,6 @@ export class HomeComponent implements OnInit {
         competenciasFormGroups.forEach((control) =>
           competenciaArray.push(control)
         );
-
-        console.log(response);
       },
       error: (err) => console.error('Erro ao carregar usuário:', err),
     });
