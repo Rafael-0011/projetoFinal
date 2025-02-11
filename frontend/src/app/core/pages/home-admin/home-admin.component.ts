@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { AllServiceService } from '../../../infra/all-service.service';
+import { AllServiceService } from '../../../infra/service/all-service.service';
 import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
 import { StatusEnum } from '../../../module/Enumerate/status-enum';
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
@@ -59,21 +59,6 @@ export class HomeAdminComponent {
     this.getDadosGraficoEscolaridade();
     this.getListUsuarios();
 
-    const e = this.teste();
-    console.log(e);
-    
-  }
-
-   teste() {
-    const a = Object.keys(EscolaridadeEnum)
-      .filter((i) => isNaN(Number(i)))
-      .reduce((acc, i) => {
-        acc.push(i);
-        return acc;
-      },[] as string[]);
-  
-    console.log("dentro do teste", a);
-    return a;
   }
 
   getDadosGraficoEscolaridade(): void {
@@ -181,7 +166,6 @@ export class HomeAdminComponent {
           competenciaArray.push(control)
         );
 
-        console.log(response);
       },
       error: (err) => console.error('Erro ao carregar usuário:', err),
     });

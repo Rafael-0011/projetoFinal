@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 import { FormBuilder } from '@angular/forms';
-import { AllServiceService } from '../../../infra/all-service.service';
+import { AllServiceService } from '../../../infra/service/all-service.service';
 import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
 

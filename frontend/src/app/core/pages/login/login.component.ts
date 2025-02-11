@@ -2,9 +2,9 @@ import { Component, inject } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AllServiceService } from '../../../infra/all-service.service';
+import { AllServiceService } from '../../../infra/service/all-service.service';
 import { LoginModel } from '../../../module/model/login-model';
-import { StorageService } from '../../../infra/storage.service';
+import { StorageService } from '../../../infra/auth/storage.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 

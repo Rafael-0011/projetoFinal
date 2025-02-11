@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
-import { AllServiceService } from '../../../infra/all-service.service';
+import { AllServiceService } from '../../../infra/service/all-service.service';
 import { CompetenciaEnum } from '../../../module/Enumerate/competencia-enum';
 import { EscolaridadeEnum } from '../../../module/Enumerate/escolaridade-enum';
 import { NivelEnum } from '../../../module/Enumerate/nivel-enum';
 import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
-import { getEmailFromToken } from '../../../infra/jwt';
+import { getEmailFromToken } from '../../../infra/auth/jwt';
 import { StatusEnum } from '../../../module/Enumerate/status-enum';
 
 @Component({

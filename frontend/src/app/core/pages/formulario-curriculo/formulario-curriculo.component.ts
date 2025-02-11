@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { AllServiceService } from '../../../infra/all-service.service';
+import { AllServiceService } from '../../../infra/service/all-service.service';
 import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { EscolaridadeEnum } from '../../../module/Enumerate/escolaridade-enum';
