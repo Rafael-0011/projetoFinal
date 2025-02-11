@@ -43,7 +43,7 @@
 </div>
 
 <p-dialog
-  header="Analisar usuário"
+  header="Dados usuário"
   [(visible)]="visible"
   [modal]="true"
   [style]="{ width: '25rem' }"
@@ -76,24 +76,23 @@
         <strong>Escolaridade:</strong
         >{{ profileForm.get("escolaridadeEnum").value }}
       </p>
-      @for (item of itemsSnacks; track item; let i = $index) {
-      <form [formGroup]="item">
-        <table>
-          <thead>
-            <tr>
-              <th>Competência</th>
-              <th>Nível</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ item.get("competenciaEnum")?.value }}</td>
-              <td>{{ item.get("nivelEnum")?.value }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-      }
+
+      <table >
+        <thead>
+          <tr>
+            <th>Competência</th>
+            <th>Nível</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of itemsSnacks; track item; let i = $index) {
+          <tr [formGroup]="item">
+            <td>{{ item.get("competenciaEnum")?.value }}</td>
+            <td>{{ item.get("nivelEnum")?.value }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
     </form>
   </div>
 </p-dialog>

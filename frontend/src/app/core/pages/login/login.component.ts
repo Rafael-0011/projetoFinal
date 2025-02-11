@@ -7,6 +7,7 @@ import { LoginModel } from '../../../module/model/login-model';
 import { StorageService } from '../../../infra/auth/storage.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { getEmailFromToken } from '../../../infra/auth/jwt';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,15 @@ export class LoginComponent {
   loginUser(): void {
     this.service.login(this.loginForm).subscribe({
       next: (response) => {
+        const email = this.loginForm.email;
+
+        if (email) {
+          this.service.obterCurriculoPorEmail(email!).subscribe({
+            next: () => {
+              this.router.navigate(['/homeUser']);
+            },
+          });
+        }
         this.storage.set('token', response.token);
         this.router.navigate(['/curriculo']);
       },

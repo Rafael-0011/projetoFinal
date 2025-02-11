@@ -80,8 +80,6 @@ export class FormularioCurriculoComponent implements OnInit {
   }
 
   cadastraCurriculo(): void {
-    const dadoEmail = getEmailFromToken();
-
     this.service.cadastroCurriculo(this.profileForm.value).subscribe({
       next: (response) => {
         console.log(this.profileForm.value);
