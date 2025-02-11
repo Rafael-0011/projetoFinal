@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 import { AllServiceService } from '../../../infra/service/all-service.service';
 import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EscolaridadeEnum } from '../../../module/Enumerate/escolaridade-enum';
 import { NivelEnum } from '../../../module/Enumerate/nivel-enum';
 import { CompetenciaEnum } from '../../../module/Enumerate/competencia-enum';
 import { Router } from '@angular/router';
+import { getEmailFromToken } from '../../../infra/auth/jwt';
 
 @Component({
   selector: 'app-formulario-curriculo',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './formulario-curriculo.component.html',
   styleUrl: './formulario-curriculo.component.css',
 })
-export class FormularioCurriculoComponent {
+export class FormularioCurriculoComponent implements OnInit {
   curriculoForm = new CadastroCurriculoModel();
   profileForm: any;
 
@@ -49,12 +50,16 @@ export class FormularioCurriculoComponent {
       name: [''],
       cpf: [''],
       nascimento: [''],
-      email: [''],
+      email: [{ value: '', disabled: true }],
       telefone: [''],
       escolaridadeEnum: [''],
       funcao: [''],
       competencia: this.buildForm.array([]),
     });
+  }
+
+  ngOnInit(): void {
+    this.addEmailNoInput();
   }
 
   get itemsSnacks() {
@@ -84,6 +89,13 @@ export class FormularioCurriculoComponent {
 
         console.log(response);
       },
+    });
+  }
+
+  addEmailNoInput() {
+    const dadoEmail = getEmailFromToken();
+    this.profileForm.patchValue({
+      email: dadoEmail,
     });
   }
 }
