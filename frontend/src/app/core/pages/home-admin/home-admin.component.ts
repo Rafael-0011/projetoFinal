@@ -5,9 +5,8 @@ import { AllServiceService } from '../../../infra/service/all-service.service';
 import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
 import { StatusEnum } from '../../../module/Enumerate/status-enum';
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
-import { NivelEnum } from '../../../module/Enumerate/nivel-enum';
-import { CompetenciaEnum } from '../../../module/Enumerate/competencia-enum';
-import { EscolaridadeEnum } from '../../../module/Enumerate/escolaridade-enum';
+import { CompetenciaInteface } from '../../../module/inteface/competencia';
+import { listStatusEnum } from '../../../shared/dados/dados-enum';
 
 @Component({
   selector: 'app-home-admin',
@@ -20,17 +19,12 @@ export class HomeAdminComponent {
   selectedStatus: any;
   visible!: boolean;
   selectedIndex!: number;
-  profileForm!: any;
+  profileForm: FormGroup;
 
   listUser: CadastroCurriculoModel[] = [];
   customers: any[] = [];
 
-  listStatus = Object.keys(StatusEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
+  listStatus = listStatusEnum();
 
   labels: string[] = [];
   datasets: { label: string; data: number[] }[] = [];
@@ -57,7 +51,7 @@ export class HomeAdminComponent {
   ngOnInit() {
     this.getDadosGraficoStatus();
     this.getDadosGraficoEscolaridade();
-    this.getListUsuarios();
+    this.getListUsuarios();    
 
   }
 
@@ -134,14 +128,10 @@ export class HomeAdminComponent {
       console.error('Email não encontrado');
       return;
     }
-    interface Competencia {
-      competenciaEnum: string;
-      nivelEnum: string;
-    }
     this.service.obterCurriculoPorEmail(email).subscribe({
       next: (response) => {
         const competenciasFormGroups: FormGroup[] = response.competencia.map(
-          (item: Competencia) =>
+          (item: CompetenciaInteface) =>
             this.buildForm.group({
               competenciaEnum: [item.competenciaEnum],
               nivelEnum: [item.nivelEnum],
@@ -175,25 +165,4 @@ export class HomeAdminComponent {
     return (this.profileForm.get('competencia') as FormArray)
       .controls as FormGroup[];
   }
-
-  niveis = Object.keys(NivelEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  competencias = Object.keys(CompetenciaEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  escolaridade = Object.keys(EscolaridadeEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
 }

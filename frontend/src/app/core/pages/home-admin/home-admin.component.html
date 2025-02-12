@@ -55,8 +55,6 @@
       <p-select
         [options]="listStatus"
         [(ngModel)]="selectedStatus"
-        optionLabel="label"
-        optionValue="value"
         placeholder="Selecione o status"
         class="w-full md:w-56"
       ></p-select>
@@ -64,17 +62,17 @@
       <p-button label="Cancelar" (click)="visible = false"></p-button>
     </div>
     <form [formGroup]="profileForm" class="form_space">
-      <p><strong>Nome:</strong> {{ profileForm.get("name").value }}</p>
-      <p><strong>CPF:</strong> {{ profileForm.get("cpf").value }}</p>
+      <p><strong>Nome:</strong> {{ profileForm.get("name")?.value }}</p>
+      <p><strong>CPF:</strong> {{ profileForm.get("cpf")?.value }}</p>
       <p>
-        <strong>Nascimento:</strong> {{ profileForm.get("nascimento").value }}
+        <strong>Nascimento:</strong> {{ profileForm.get("nascimento")?.value }}
       </p>
-      <p><strong>Email:</strong> {{ profileForm.get("email").value }}</p>
-      <p><strong>Telefone:</strong> {{ profileForm.get("telefone").value }}</p>
-      <p><strong>Função:</strong> {{ profileForm.get("funcao").value }}</p>
+      <p><strong>Email:</strong> {{ profileForm.get("email")?.value }}</p>
+      <p><strong>Telefone:</strong> {{ profileForm.get("telefone")?.value }}</p>
+      <p><strong>Função:</strong> {{ profileForm.get("funcao")?.value }}</p>
       <p>
         <strong>Escolaridade:</strong
-        >{{ profileForm.get("escolaridadeEnum").value }}
+        >{{ profileForm.get("escolaridadeEnum")?.value }}
       </p>
 
       <table >

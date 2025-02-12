@@ -1,14 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-
-interface JwtPayload {
-  iss: string;
-  sub: string;
-  exp: number;
-  iat: number;
-  authorities: string;
-}
+import { JwtPayload } from '../../module/inteface/jwtPayload';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
@@ -32,7 +25,9 @@ export const authGuardAdmin: CanActivateFn = (route, state) => {
   try {
     const decoded: JwtPayload = jwtDecode<JwtPayload>(token);
 
-    if (decoded.authorities.includes('ROLE_ADMIN')) {
+    const exp = decoded.exp * 1000;
+
+    if (decoded.authorities.includes('ROLE_ADMIN') && exp > Date.now()) {
       return true;
     }
   } catch (error) {

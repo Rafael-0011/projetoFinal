@@ -1,14 +1,14 @@
-<div class="card">
+<div class="card" [formGroup]="loginForm">
   <h1>Login</h1>
   <div class="floatlabel_space">
     <p-floatlabel variant="in">
-      <input id="email" pInputText [(ngModel)]="loginForm.email" />
+      <input id="email" pInputText formControlName="email" />
       <label for="email">Email</label>
     </p-floatlabel>
   </div>
   <div class="floatlabel_space">
     <p-floatlabel variant="in">
-      <input id="password" pInputText [(ngModel)]="loginForm.password" />
+      <input id="password" pInputText formControlName="password" />
       <label for="password">Password</label>
     </p-floatlabel>
   </div>
