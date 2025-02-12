@@ -9,6 +9,11 @@ import { NivelEnum } from '../../../module/Enumerate/nivel-enum';
 import { CompetenciaEnum } from '../../../module/Enumerate/competencia-enum';
 import { Router } from '@angular/router';
 import { getEmailFromToken } from '../../../infra/auth/jwt';
+import {
+  competenciasEnum,
+  escolaridadeEnum,
+  niveisEnum,
+} from '../../../shared/dados/dados-enum';
 
 @Component({
   selector: 'app-formulario-curriculo',
@@ -17,35 +22,18 @@ import { getEmailFromToken } from '../../../infra/auth/jwt';
   styleUrl: './formulario-curriculo.component.css',
 })
 export class FormularioCurriculoComponent implements OnInit {
-  curriculoForm = new CadastroCurriculoModel();
-  profileForm: any;
+  profileForm: FormGroup;
 
-  niveis = Object.keys(NivelEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  competencias = Object.keys(CompetenciaEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  escolaridade = Object.keys(EscolaridadeEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
+  niveis = niveisEnum();
+  competencias = competenciasEnum();
+  escolaridade = escolaridadeEnum();
 
   constructor(
     private buildForm: FormBuilder,
     private service: AllServiceService,
     private route: Router
   ) {
+
     this.profileForm = this.buildForm.group({
       name: [''],
       cpf: [''],
@@ -82,13 +70,11 @@ export class FormularioCurriculoComponent implements OnInit {
   cadastraCurriculo(): void {
     this.service.cadastroCurriculo(this.profileForm.value).subscribe({
       next: (response) => {
-        console.log(this.profileForm.value);
         this.route.navigate(['/homeUser']);
-        console.log(response);
       },
       error: (err) => {
         console.log(err);
-        this.route.navigate(['homeUser']);
+        this.route.navigate(['/homeUser']);
       },
     });
   }

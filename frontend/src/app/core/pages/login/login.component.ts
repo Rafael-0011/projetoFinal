@@ -7,7 +7,7 @@ import { LoginModel } from '../../../module/model/login-model';
 import { StorageService } from '../../../infra/auth/storage.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { getEmailFromToken } from '../../../infra/auth/jwt';
+import { getAuthToken } from '../../../infra/auth/jwt';
 
 @Component({
   selector: 'app-login',
@@ -16,31 +16,45 @@ import { getEmailFromToken } from '../../../infra/auth/jwt';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  loginForm = new LoginModel();
+  loginForm: FormGroup;
 
   constructor(
     private service: AllServiceService,
     private storage: StorageService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private builderForm: FormBuilder
+  ) {
+    this.loginForm = this.builderForm.group({
+      email: [''],
+      password: [''],
+    });
+  }
 
   loginUser(): void {
-    this.service.login(this.loginForm).subscribe({
+    this.service.login(this.loginForm.value).subscribe({
       next: (response) => {
-        const email = this.loginForm.email;
+        this.storage.set('token', response.token);
+        const email = this.loginForm.get('email')?.value;
+        const authTokenRoleAdmin = getAuthToken();
+
+        if (authTokenRoleAdmin) {
+          this.router.navigate(['/homeAdmin']);
+          return;
+        }
 
         if (email) {
           this.service.obterCurriculoPorEmail(email!).subscribe({
             next: () => {
               this.router.navigate(['/homeUser']);
             },
+            error: () => {
+              this.router.navigate(['/curriculo']);
+            },
           });
         }
-        this.storage.set('token', response.token);
-        this.router.navigate(['/curriculo']);
       },
       error: () => {
-        console.log('Erro ao acessa');
+        alert('Email ou senha errados');
       },
     });
   }
