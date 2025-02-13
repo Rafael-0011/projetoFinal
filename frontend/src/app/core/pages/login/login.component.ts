@@ -7,7 +7,7 @@ import { LoginModel } from '../../../module/model/login-model';
 import { StorageService } from '../../../infra/auth/storage.service';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import { getAuthToken } from '../../../infra/auth/jwt';
+import { getAuthToken, refreshToken } from '../../../infra/auth/jwt';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +31,7 @@ export class LoginComponent {
   }
 
   loginUser(): void {
+    refreshToken();
     this.service.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.storage.set('token', response.token);
@@ -54,7 +55,7 @@ export class LoginComponent {
         }
       },
       error: () => {
-        alert('Email ou senha errados');
+        alert('Sem cadastro');
       },
     });
   }

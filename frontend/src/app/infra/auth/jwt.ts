@@ -11,7 +11,7 @@ export function getEmailFromToken(): string | null {
 
     return decoded.sub;
   } catch (error) {
-    console.error('Erro ao decodificar o token:', error);
+    console.error('getEmailFromToken:', error);
     return null;
   }
 }
@@ -30,7 +30,26 @@ export function getAuthToken() {
     }
     return false;
   } catch (error) {
-    console.error('Erro ao decodificar o token:', error);
+    console.error('getAuthToken:', error);
+    return null;
+  }
+}
+
+export function refreshToken() {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const decoded: JwtPayload = jwtDecode<JwtPayload>(token);
+    const authToken = decoded.exp;
+    const expire = authToken * 1000;
+
+    if (expire < Date.now()) {
+      localStorage.removeItem('token');
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('refreshToken:', error);
     return null;
   }
 }
