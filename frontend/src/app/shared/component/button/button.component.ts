@@ -7,14 +7,14 @@ import { Component, Input } from '@angular/core';
   standalone: false,
 })
 export class ButtonComponent {
-  @Input() function!:()=>void;
+  @Input() onClickFunction!:()=>void;
 
   @Input() text!:string;
 
-  
+
   onClick(): void {
-    if (this.function) {
-      this.function();  
+    if (this.onClickFunction) {
+      this.onClickFunction();  
     }
   }
 }

@@ -1,10 +1,10 @@
 package com.example.backend.service.userService;
 
+import com.example.backend.dto.req.UserReqDto.UserCadastroReqDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.dto.UserDto.UserCadastroDto;
 import com.example.backend.model.UserModel;
 import com.example.backend.repository.UserRepository;
 
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel cadastraUser(UserCadastroDto userCadastroDto) {
+    public UserModel cadastraUser(UserCadastroReqDto userCadastroDto) {
         UserModel loginDados = modelMapper.map(userCadastroDto, UserModel.class);
         String senhaCriptada = passwordEncoder.encode(loginDados.getPassword());
         loginDados.setPassword(senhaCriptada);

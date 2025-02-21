@@ -1,6 +1,6 @@
 package com.example.backend.model;
 
-import com.example.backend.dto.competenciaDto.CompetenciaCadastroDto;
+import com.example.backend.dto.req.competenciaReqDto.CompetenciaCadastroReqDto;
 import com.example.backend.enumerate.CompetenciaEnum;
 import com.example.backend.enumerate.NivelEnum;
 
@@ -31,7 +31,7 @@ public class CompetenciaModel {
   @Enumerated(EnumType.STRING)
   private NivelEnum nivelEnum;
 
-  public CompetenciaModel(CompetenciaCadastroDto cadastroDto) {
+  public CompetenciaModel(CompetenciaCadastroReqDto cadastroDto) {
     this.competenciaEnum = cadastroDto.competenciaEnum();
     this.nivelEnum = cadastroDto.nivelEnum();
   }

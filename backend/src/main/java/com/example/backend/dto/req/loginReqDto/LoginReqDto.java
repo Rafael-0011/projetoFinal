@@ -1,8 +1,8 @@
-package com.example.backend.dto.loginDto;
+package com.example.backend.dto.req.loginReqDto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record LoginDto(
+public record LoginReqDto(
         @NotBlank(message = "Para fazer LOGIN precisa do email") String email,
         @NotBlank(message = "Para fazer LOGIN precisa do password")  String password) {
 

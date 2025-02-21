@@ -1,5 +1,5 @@
 <div class="card">
-  <h1>Cadastra</h1>
+  <h1>Cadastra Curriculo</h1>
 
   <form [formGroup]="profileForm" class="input_space">
     <app-input controlName="name" label="Name"></app-input>
@@ -56,12 +56,12 @@
 
     }
     <app-button
-      [function]="addSnacks.bind(this)"
+      [onClickFunction]="addSnacks.bind(this)"
       text="Add Competencia"
     ></app-button>
 
     <app-button
-      [function]="cadastraCurriculo.bind(this)"
+      [onClickFunction]="cadastraCurriculo.bind(this)"
       text="Cadastra"
     ></app-button>
   </form>
