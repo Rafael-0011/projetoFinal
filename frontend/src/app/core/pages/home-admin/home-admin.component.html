@@ -1,25 +1,25 @@
 <div class="grafico">
   <app-chart-bar
-    [labels]="labels"
-    [datasets]="datasets"
+    [labels]="graficBarLabels"
+    [datasets]="graficBarDatasets"
     class="custon_grafico_bar"
   ></app-chart-bar>
   <app-chart-pie
-    [labels]="labels2"
-    [datasets]="datasets2"
+    [labels]="graficPieLabels"
+    [datasets]="graficPieDatasets"
     class="custon_grafico_pie"
   ></app-chart-pie>
 </div>
 
-<div class="flex justify-content-center mt-4">
+<div class="flex justify-content-center py-4">
   <p-table
     [value]="customers"
+    [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"
     [rows]="5"
-    [tableStyle]="{ 'min-width': '50rem' }"
     [rowsPerPageOptions]="[5, 10, 20]"
   >
-    <ng-template pTemplate="header">
+    <ng-template #header>
       <tr>
         <th style="width: 25%">Nome</th>
         <th style="width: 25%">Email</th>
@@ -28,7 +28,7 @@
         <th style="width: 25%">Ações</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-customer let-i="rowIndex">
+    <ng-template #body let-customer let-i="rowIndex">
       <tr>
         <td>{{ customer.name }}</td>
         <td>{{ customer.email }}</td>
@@ -50,18 +50,21 @@
 >
   <span class="p-text-secondary block mb-1">Escolha Status</span>
 
-  <div>
+  <div [formGroup]="profileForm">
     <div class="flex items-center gap-2">
       <p-select
-        [options]="listStatus"
-        [(ngModel)]="selectedStatus"
+        [options]="status"
         placeholder="Selecione o status"
+        formControlName="statusEnum"
         class="w-full md:w-56"
       ></p-select>
-      <p-button label="Alterar" (click)="alteraUse()"></p-button>
+      <p-button
+        label="Alterar"
+        (click)="alteraStatusCurriculoUser()"
+      ></p-button>
       <p-button label="Cancelar" (click)="visible = false"></p-button>
     </div>
-    <form [formGroup]="profileForm" class="form_space">
+    <form class="form_space">
       <p><strong>Nome:</strong> {{ profileForm.get("name")?.value }}</p>
       <p><strong>CPF:</strong> {{ profileForm.get("cpf")?.value }}</p>
       <p>
@@ -71,11 +74,11 @@
       <p><strong>Telefone:</strong> {{ profileForm.get("telefone")?.value }}</p>
       <p><strong>Função:</strong> {{ profileForm.get("funcao")?.value }}</p>
       <p>
-        <strong>Escolaridade:</strong
-        >{{ profileForm.get("escolaridadeEnum")?.value }}
+        <strong>Escolaridade:</strong>
+        {{ profileForm.get("escolaridadeEnum")?.value }}
       </p>
 
-      <table >
+      <table>
         <thead>
           <tr>
             <th>Competência</th>
@@ -83,8 +86,8 @@
           </tr>
         </thead>
         <tbody>
-          @for (item of itemsSnacks; track item; let i = $index) {
-          <tr [formGroup]="item">
+          @for (item of itemsSnacks; track i; let i = $index) {
+          <tr>
             <td>{{ item.get("competenciaEnum")?.value }}</td>
             <td>{{ item.get("nivelEnum")?.value }}</td>
           </tr>

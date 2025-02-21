@@ -1,0 +1,4 @@
+:host ::ng-deep .custom-button {
+    padding: 12px 24px;
+    font-size: 16px;
+  }

@@ -1,5 +1,9 @@
 package com.example.backend.enumerate;
 
+import com.example.backend.service.GlobalService;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum CompetenciaEnum {
     JAVA,
     SPRING_BOOT,
@@ -36,5 +40,18 @@ public enum CompetenciaEnum {
     CI_CD,
     SECURITY,
     BIG_DATA,
-    BLOCKCHAIN;
+    BLOCKCHAIN
+    
+    ;
+
+    @JsonCreator
+    public static CompetenciaEnum fromString(String value) {
+        String normalized = GlobalService.removeAccents(value).replaceAll("[\\s/.]", "_").toUpperCase();
+        return CompetenciaEnum.valueOf(normalized);
+    }
+
+    @JsonValue
+    public String toJson() {
+        return name();
+    }
 }

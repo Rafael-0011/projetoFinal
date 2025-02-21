@@ -1,55 +1,51 @@
-import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from '../../module/inteface/jwtPayload';
+import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-export function getEmailFromToken(): string | null {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
+@Injectable({
+  providedIn: 'root',
+})
+export class TokenJwt {
+  private helperService = new JwtHelperService();
+  private tokenKey = 'token';
 
-  try {
+  private getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  getTokenDecoded() {
+    const token = this.getToken();
     if (!token) return null;
-    const decoded: any = jwtDecode(token);
 
-    return decoded.sub;
-  } catch (error) {
-    console.error('getEmailFromToken:', error);
-    return null;
+    try {
+      return this.helperService.decodeToken(token);
+    } catch (error) {
+      console.error('Erro ao decodificar o token:', error);
+      return null;
+    }
   }
-}
 
-export function getAuthToken() {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
+  expireToken(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
 
-  try {
-    const decoded: JwtPayload = jwtDecode<JwtPayload>(token);
-
-    const authToken = decoded.authorities;
-
-    if (authToken.includes('ROLE_ADMIN')) {
+    const tokenExpirado = this.helperService.isTokenExpired(token);
+    if (tokenExpirado) {
+      localStorage.removeItem(this.tokenKey);
       return true;
     }
+
     return false;
-  } catch (error) {
-    console.error('getAuthToken:', error);
-    return null;
   }
-}
 
-export function refreshToken() {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  try {
-    const decoded: JwtPayload = jwtDecode<JwtPayload>(token);
-    const authToken = decoded.exp;
-    const expire = authToken * 1000;
+  getEmailFromToken(): string | false {
+    return this.getTokenDecoded()?.sub || false;
+  }
 
-    if (expire < Date.now()) {
-      localStorage.removeItem('token');
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error('refreshToken:', error);
-    return null;
+  hasRole(role: string): boolean {
+    return this.getTokenDecoded()?.authorities?.includes(role) || false;
+  }
+
+  getAuthAdminToken(): boolean {
+    return this.hasRole('ROLE_ADMIN');
   }
 }

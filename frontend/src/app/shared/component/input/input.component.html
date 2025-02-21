@@ -1,0 +1,13 @@
+<div class="input">
+    <p-floatlabel variant="in">
+        <input id="{{controlName}}"  
+        pInputText 
+        [formControlName]="controlName"  
+        class="input_width"
+        [ngClass]="{'ng-dirty ng-invalid': control.invalid && (control.dirty || control.touched)}"/>
+        <label for="{{controlName}}">{{ label }}</label>
+    </p-floatlabel>
+    <app-custom-validation-message [controlName]="controlName"></app-custom-validation-message>
+      
+</div>
+

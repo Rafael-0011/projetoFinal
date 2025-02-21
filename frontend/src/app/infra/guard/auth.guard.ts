@@ -1,37 +1,44 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from '../../module/inteface/jwtPayload';
+import { TokenJwt } from '../auth/jwt';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router);
-  const token = localStorage.getItem('token');
-  if (!token) {
+const validateToken = (tokenJwt: TokenJwt, router: Router): boolean => {
+  const tokenExpire = tokenJwt.expireToken();
+  const email = tokenJwt.getEmailFromToken();
+
+  if (tokenExpire || !email) {
     router.navigateByUrl('');
     return false;
   }
   return true;
 };
 
-export const authGuardAdmin: CanActivateFn = (route, state) => {
-  const router = inject(Router);
-  const token = localStorage.getItem('token');
+const hasRole = (tokenJwt: TokenJwt, role: string): boolean => {
+  try {
+    const token = tokenJwt.getTokenDecoded();
+    return token?.authorities?.includes(role);
+  } catch (error) {
+    console.error('Erro ao decodificar JWT:', error);
+    return false;
+  }
+};
 
-  if (!token) {
-    router.navigateByUrl('');
+export const authGuard: CanActivateFn = (route, state) => {
+  const tokenJwt = inject(TokenJwt);
+  const router = inject(Router);
+  return validateToken(tokenJwt, router);
+};
+
+export const authGuardAdmin: CanActivateFn = (route, state) => {
+  const tokenJwt = inject(TokenJwt);
+  const router = inject(Router);
+
+  if (!validateToken(tokenJwt, router)) {
     return false;
   }
 
-  try {
-    const decoded: JwtPayload = jwtDecode<JwtPayload>(token);
-
-    const exp = decoded.exp * 1000;
-
-    if (decoded.authorities.includes('ROLE_ADMIN') && exp > Date.now()) {
-      return true;
-    }
-  } catch (error) {
-    console.error('Erro ao decodificar JWT:', error);
+  if (hasRole(tokenJwt, 'ROLE_ADMIN')) {
+    return true;
   }
 
   router.navigateByUrl('');

@@ -3,29 +3,35 @@ package com.example.backend.config;
 
 import com.example.backend.model.UserModel;
 import com.example.backend.repository.UserRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.example.backend.enumerate.Role.ADMIN;
-import static com.example.backend.enumerate.Role.USER;
+import static com.example.backend.enumerate.RoleEnum.ADMIN;
+import static com.example.backend.enumerate.RoleEnum.USER;
+
+
 
 @Configuration
 public class CreateadminAndUser{
     @Bean
     CommandLineRunner createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder){
-        return args -> {
-            if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
-                UserModel admin = new UserModel();
-                admin.setEmail("admin@gmail.com");
-                admin.setPassword(passwordEncoder.encode("admin123")); // Criptografando a senha
-                admin.setRole(ADMIN);
-
-                userRepository.save(admin);
-                System.out.println("✅ Admin artificial criado com sucesso!");
-            } else {
-                System.out.println("⚠️ Admin já existe. Nenhuma ação necessária.");
+        return new CommandLineRunner() {
+            @Override
+            public void run(String[] args) throws Exception {
+                if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
+                    UserModel admin = new UserModel();
+                    admin.setEmail("admin@gmail.com");
+                    admin.setPassword(passwordEncoder.encode("admin123")); // Criptografando a senha
+                    admin.setRole(ADMIN);
+                    
+                    userRepository.save(admin);
+                    System.out.println("✅ Admin artificial criado com sucesso!");
+                } else {
+                    System.out.println("⚠️ Admin já existe. Nenhuma ação necessária.");
+                }
             }
         };
     }

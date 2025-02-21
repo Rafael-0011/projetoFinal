@@ -1,17 +1,21 @@
 package com.example.backend.model;
 
 import java.util.Collection;
-import java.util.Collections;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.backend.enumerate.Role;
+import com.example.backend.enumerate.RoleEnum;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +26,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserModel implements UserDetails , CredentialsContainer {
+public class UserModel implements UserDetails, CredentialsContainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +36,7 @@ public class UserModel implements UserDetails , CredentialsContainer {
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private RoleEnum role = RoleEnum.USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

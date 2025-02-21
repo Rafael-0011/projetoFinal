@@ -1,21 +1,19 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.competenciaDto.CompetenciaCadastroDto;
-import com.example.backend.model.CompetenciaModel;
-import com.example.backend.model.CurriculoFormModel;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class GlobalService {
 
-    public <T> void atualizaDados(T valor, Consumer<T> setter){
+    public <T> void atualizaDados(T valor, Consumer<T> setter) {
         if (valor != null) {
-            if (valor instanceof String) {
-                if (!((String) valor).isEmpty()) {
+            if (valor instanceof String string) {
+                if (!string.isEmpty()) {
                     setter.accept(valor);
                 }
             } else if (valor instanceof List) {
@@ -26,6 +24,12 @@ public class GlobalService {
                 setter.accept(valor);
             }
         }
+    }
+
+    public static String removeAccents(String str) {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
 
 }

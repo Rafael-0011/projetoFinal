@@ -2,56 +2,39 @@ import { Component, OnInit } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
-import { AllServiceService } from '../../../infra/service/all-service.service';
-import { CompetenciaEnum } from '../../../module/Enumerate/competencia-enum';
-import { EscolaridadeEnum } from '../../../module/Enumerate/escolaridade-enum';
-import { NivelEnum } from '../../../module/Enumerate/nivel-enum';
-import { CadastroCurriculoModel } from '../../../module/model/cadastro-curriculo-model';
-import { getEmailFromToken } from '../../../infra/auth/jwt';
-import { StatusEnum } from '../../../module/Enumerate/status-enum';
+import { CurriculoService } from '../../../infra/service/curriculo.service';
+import {
+  niveisEnum,
+  competenciasEnum,
+  escolaridadeEnum,
+  statusEnum,
+} from '../../../shared/dadoEnum/dados-enum';
+import { InputComponent } from '../../../shared/component/input/input.component';
+import { TokenJwt } from '../../../infra/auth/jwt';
 
 @Component({
   selector: 'app-home',
-  imports: [BaseModule, PrimeNgModule],
+  imports: [BaseModule, PrimeNgModule, InputComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  curriculoForm = new CadastroCurriculoModel();
-  profileForm: any;
-  listUser: CadastroCurriculoModel[] = [];
+  profileForm: FormGroup;
 
-  niveis = Object.keys(NivelEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
+  niveis = niveisEnum();
+  competencias = competenciasEnum();
+  escolaridade = escolaridadeEnum();
+  status = statusEnum();
 
-  competencias = Object.keys(CompetenciaEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  escolaridade = Object.keys(EscolaridadeEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
-
-  listStatus = Object.keys(StatusEnum)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key,
-      value: key,
-    }));
+  get itemsSnacks() {
+    return (this.profileForm.get('competencia') as FormArray)
+      .controls as FormGroup[];
+  }
 
   constructor(
     private buildForm: FormBuilder,
-    private service: AllServiceService
+    private curriculoService: CurriculoService,
+    private tokenJwt: TokenJwt
   ) {
     this.profileForm = this.buildForm.group({
       name: [''],
@@ -61,53 +44,49 @@ export class HomeComponent implements OnInit {
       telefone: [''],
       escolaridadeEnum: [''],
       funcao: [''],
-      competencia: this.buildForm.array([]),
       statusEnum: [''],
+      competencia: this.buildForm.array([]),
     });
   }
   ngOnInit(): void {
     this.carregarDadosUsuario();
   }
 
-  get itemsSnacks() {
-    return (this.profileForm.get('competencia') as FormArray)
-      .controls as FormGroup[];
-  }
-
   removeSnack(index: number) {
     (this.profileForm.get('competencia') as FormArray).removeAt(index);
   }
 
-  /*
-  addSnacks(){
-    
-    const newa = this.buildForm.group({
-      competenciaEnum: [''],
-      nivelEnum:['']
-    })
-    return (this.profileForm.get('competencia') as FormArray).push(newa)
+  isEdita:any;
+  toggleFormState(altera:boolean): void {
+    this.isEdita = altera;
+    if (this.isEdita  === true) {
+      this.profileForm.enable();
+      const data = this.profileForm.get('statusEnum') as FormGroup;
+      data?.disable();
+    } else {
+      this.profileForm.disable();
+      const data = this.profileForm.get('statusEnum') as FormGroup;
+      data?.disable();
+    }
   }
-    */
 
   carregarDadosUsuario(): void {
-    const email = getEmailFromToken();
+    const email = this.tokenJwt.getEmailFromToken();
     if (!email) {
       console.error('Email não encontrado no token');
       return;
     }
-    interface Competencia {
-      competenciaEnum: string;
-      nivelEnum: string;
-    }
-    this.service.obterCurriculoPorEmail(email).subscribe({
+
+    this.curriculoService.obterCurriculoPorEmail(email).subscribe({
       next: (response) => {
         const competenciasFormGroups: FormGroup[] = response.competencia.map(
-          (item: Competencia) =>
+          (item: any) =>
             this.buildForm.group({
               competenciaEnum: [item.competenciaEnum],
               nivelEnum: [item.nivelEnum],
             })
         );
+
         this.profileForm.patchValue({
           name: response.name,
           cpf: response.cpf,
@@ -116,9 +95,10 @@ export class HomeComponent implements OnInit {
           telefone: response.telefone,
           escolaridadeEnum: response.escolaridadeEnum,
           funcao: response.funcao,
-          statusEnum: response.statusEnum,
+          statusEnum: response.statusEnum || 'AGUARDANDO',
           competencia: response.competencia || [],
         });
+
         const competenciaArray = this.profileForm.get(
           'competencia'
         ) as FormArray;
@@ -126,7 +106,10 @@ export class HomeComponent implements OnInit {
         competenciasFormGroups.forEach((control) =>
           competenciaArray.push(control)
         );
+
+        this.toggleFormState(this.isEdita);
       },
+
       error: (err) => console.error('Erro ao carregar usuário:', err),
     });
   }

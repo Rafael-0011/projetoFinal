@@ -10,9 +10,11 @@ export class ButtonComponent {
   @Input() function!:()=>void;
 
   @Input() text!:string;
+
+  
   onClick(): void {
     if (this.function) {
-      this.function();  // Chama a função passada como Input
+      this.function();  
     }
   }
 }

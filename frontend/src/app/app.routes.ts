@@ -12,16 +12,20 @@ export const routes: Routes = [
     component: FormularioCurriculoComponent,
     canActivate: [authGuard],
   },
+
   { path: '', component: LoginComponent },
+
   {
     path: 'homeAdmin',
     component: HomeAdminComponent,
     canActivate: [authGuardAdmin],
   },
+
   {
     path: 'cadastro',
     component: CadastroUserComponent,
     canActivate: [authGuard],
   },
+  
   { path: 'homeUser', component: HomeComponent, canActivate: [authGuard] },
 ];

@@ -1,20 +1,10 @@
 <div class="card" [formGroup]="loginForm">
   <h1>Login</h1>
-  <div class="floatlabel_space">
-    <p-floatlabel variant="in">
-      <input id="email" pInputText formControlName="email" />
-      <label for="email">Email</label>
-    </p-floatlabel>
-  </div>
-  <div class="floatlabel_space">
-    <p-floatlabel variant="in">
-      <input id="password" pInputText formControlName="password" />
-      <label for="password">Password</label>
-    </p-floatlabel>
-  </div>
+  <app-input controlName="email" label="Email" />
+  <app-input controlName="password" label="Password" />
 
   <div class="button">
-    <app-button [function]="loginUser.bind(this)" text="Login"></app-button>
-    <app-button routerLink="/cadastro" text="criar conta"></app-button>
+    <app-button [function]="loginUser.bind(this)" text="Login" />
+    <app-button routerLink="cadastro" text="criar conta" />
   </div>
 </div>

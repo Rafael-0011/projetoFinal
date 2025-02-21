@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { FormBuilder } from '@angular/forms';
-import { AllServiceService } from '../../../infra/service/all-service.service';
-import { routes } from '../../../app.routes';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { InputComponent } from '../../../shared/component/input/input.component';
+import { UserService } from '../../../infra/service/user.service';
 
 @Component({
   selector: 'app-cadastro-user',
-  imports: [BaseModule, PrimeNgModule],
+  imports: [BaseModule, PrimeNgModule, InputComponent],
   templateUrl: './cadastro-user.component.html',
   styleUrl: './cadastro-user.component.css',
 })
@@ -17,19 +17,19 @@ export class CadastroUserComponent {
 
   constructor(
     private buildForm: FormBuilder,
-    private service: AllServiceService,
-    private route: Router
+    private route: Router,
+    private userService: UserService
   ) {
     this.profileForm = this.buildForm.group({
-      email: [''],
-      password: [''],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
   cadastraUser(): void {
-    this.service.cadastroUser(this.profileForm.value).subscribe({
+    this.userService.cadastroUser(this.profileForm.value).subscribe({
       next: (response) => {
-        console.log(response);
+        alert("Conta criada")
         this.route.navigate(['/']);
       },
       error: (err) => {

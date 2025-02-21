@@ -1,0 +1,11 @@
+@if (control && control.invalid && (control.dirty || control.touched)) { @if
+(control.hasError('required')) {
+} @if (control.hasError('email')) {
+<span>Endereço de E-mail inválido!</span>
+} @if (control.hasError('minlength')) {
+<span>Este campo deve ter ao menos {{ minLength }} caracteres!</span>
+} @if (control.hasError('maxlength')) {
+<span>Este campo deve ter no máximo {{ maxLength }} caracteres!</span>
+} @if (control.hasError('pattern')) {
+<span>Padrão inválido!</span>
+} }

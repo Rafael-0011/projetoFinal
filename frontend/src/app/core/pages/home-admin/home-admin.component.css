@@ -1,7 +1,6 @@
-.grafico{
+ .grafico{
     display: flex;
     justify-content: center;
-    justify-content: space-evenly;
     align-items: center;
     margin-top: 2rem;
 }
@@ -9,6 +8,7 @@
 .custon_grafico_bar{
     width: 35rem;
 }
+
 .custon_grafico_pie{
     width: 25rem;
 }
@@ -21,3 +21,4 @@
 .lista_font{
     font-size: 16px;
 }
+

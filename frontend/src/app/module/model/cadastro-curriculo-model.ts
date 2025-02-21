@@ -1,8 +1,6 @@
 import { CompetenciaEnum } from "../Enumerate/competencia-enum";
 import { EscolaridadeEnum } from "../Enumerate/escolaridade-enum";
-import { NivelEnum } from "../Enumerate/nivel-enum";
-import { StatusEnum } from "../Enumerate/status-enum";
-import { CompotenciaMoral } from "./competencia-moral";
+import { CompotenciaModal } from "./competencia-moral";
 
 export class CadastroCurriculoModel {
   id!:number
@@ -13,6 +11,5 @@ export class CadastroCurriculoModel {
   telefone!: string;
   escolaridadeEnum!: EscolaridadeEnum;
   funcao!: string;
-  competencia!: CompotenciaMoral;
-  statusEnum!:StatusEnum
+  competencia!: CompotenciaModal[];
 }

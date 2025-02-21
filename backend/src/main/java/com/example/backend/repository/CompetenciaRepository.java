@@ -10,4 +10,5 @@ import com.example.backend.model.CompetenciaModel;
 @Repository
 public interface CompetenciaRepository extends JpaRepository<CompetenciaModel, Long> {
     CompetenciaModel findByCompetenciaEnumAndNivelEnum(CompetenciaEnum competenciaEnum, NivelEnum nivelEnum);
+    
 }

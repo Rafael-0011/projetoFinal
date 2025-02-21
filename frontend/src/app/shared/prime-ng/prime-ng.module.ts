@@ -15,6 +15,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @NgModule({
   declarations: [],
@@ -34,7 +35,8 @@ import { DialogModule } from 'primeng/dialog';
     FloatLabelModule,
     SelectModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    DatePickerModule
   ],
 
   exports: [
@@ -53,7 +55,8 @@ import { DialogModule } from 'primeng/dialog';
     FloatLabelModule,
     SelectModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    DatePickerModule
   ],
 })
 export class PrimeNgModule {}
