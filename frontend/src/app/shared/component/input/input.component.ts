@@ -10,7 +10,6 @@ import { FormGroup, FormControl, ControlContainer, FormGroupDirective } from '@a
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
-
 })
 export class InputComponent {
   @Input() controlName!: string;

@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
     margin-top: 10rem;
     border-radius: 10px;
 
@@ -10,10 +9,7 @@
 .form_space{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
-    width: 100%;
+    justify-content: center;  
 
 }
 .floatlabel_space{

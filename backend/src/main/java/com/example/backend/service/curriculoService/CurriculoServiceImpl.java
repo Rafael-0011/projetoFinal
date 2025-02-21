@@ -20,8 +20,8 @@ import com.example.backend.dto.res.CurriculoDtoRes.CurriculoListagemResDto;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.model.CurriculoModel;
 import com.example.backend.repository.CurriculoRepository;
-import com.example.backend.service.CompetenciaService;
 import com.example.backend.service.GlobalService;
+import com.example.backend.service.competenciaService.CompetenciaService;
 
 import jakarta.transaction.Transactional;
 

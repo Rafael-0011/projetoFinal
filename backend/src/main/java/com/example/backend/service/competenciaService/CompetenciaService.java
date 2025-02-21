@@ -1,9 +1,9 @@
-package com.example.backend.service;
+package com.example.backend.service.competenciaService;
 
-import com.example.backend.dto.req.competenciaReqDto.CompetenciaCadastroReqDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.example.backend.dto.req.competenciaReqDto.CompetenciaCadastroReqDto;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.repository.CompetenciaRepository;
 

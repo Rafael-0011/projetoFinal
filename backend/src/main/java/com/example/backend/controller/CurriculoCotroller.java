@@ -16,6 +16,7 @@ import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarReqDto;
 import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarStatusReqDto;
 import com.example.backend.dto.req.CurriculoReqDto.CurriculoCadastraReqDto;
 import com.example.backend.dto.res.CurriculoDtoRes.CurriculoListagemResDto;
+import com.example.backend.dto.res.MessageRes.MessageResponse;
 import com.example.backend.model.CurriculoModel;
 import com.example.backend.service.curriculoService.CurriculoService;
 
@@ -39,9 +40,9 @@ public class CurriculoCotroller {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<String> cadastraForm(@RequestBody @Valid CurriculoCadastraReqDto cadastraDto) {
+    public ResponseEntity<MessageResponse> cadastraForm(@RequestBody @Valid CurriculoCadastraReqDto cadastraDto) {
             curriculoService.cadastraCurriculo(cadastraDto);
-            return ResponseEntity.ok().body("Curriculo Cadastro Com Sucesso");
+            return ResponseEntity.ok(new MessageResponse("Curriculo Cadastro Com Sucesso"));
     }
 
     @GetMapping

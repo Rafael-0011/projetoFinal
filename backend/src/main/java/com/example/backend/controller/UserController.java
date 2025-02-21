@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.dto.req.UserReqDto.UserCadastroReqDto;
+import com.example.backend.dto.res.MessageRes.MessageResponse;
 import com.example.backend.service.userService.UserService;
 
 @RestController
@@ -23,9 +24,9 @@ public class UserController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity<String> cadastraUser(@RequestBody UserCadastroReqDto userCadastroDto) {
+    public ResponseEntity<MessageResponse> cadastraUser(@RequestBody UserCadastroReqDto userCadastroDto) {
         userService.cadastraUser(userCadastroDto);
-        return ResponseEntity.ok().body("Usuario Criado Com Sucesso");
+        return ResponseEntity.ok(new MessageResponse("Usuario Criado Com Sucesso"));
     }
 
 }
