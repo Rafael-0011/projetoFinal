@@ -42,7 +42,7 @@ export class FormularioCurriculoComponent implements OnInit {
     private tokenJwt: TokenJwt
   ) {
     this.profileForm = this.buildForm.group({
-      name: ['', Validators.required, Validators.minLength(3)],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       cpf: ['', Validators.required],
       nascimento: ['', Validators.required],
       email: ['', Validators.required],

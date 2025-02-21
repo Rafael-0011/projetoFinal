@@ -13,7 +13,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
 
-  { path: '', component: LoginComponent },
+  {
+    path: '',
+    component: LoginComponent,
+  },
 
   {
     path: 'homeAdmin',
@@ -24,8 +27,11 @@ export const routes: Routes = [
   {
     path: 'cadastro',
     component: CadastroUserComponent,
+  },
+
+  {
+    path: 'homeUser',
+    component: HomeComponent,
     canActivate: [authGuard],
   },
-  
-  { path: 'homeUser', component: HomeComponent, canActivate: [authGuard] },
 ];

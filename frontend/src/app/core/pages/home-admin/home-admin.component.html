@@ -49,7 +49,6 @@
   [style]="{ width: '25rem' }"
 >
   <span class="p-text-secondary block mb-1">Escolha Status</span>
-
   <div [formGroup]="profileForm">
     <div class="flex items-center gap-2">
       <p-select
@@ -58,26 +57,17 @@
         formControlName="statusEnum"
         class="w-full md:w-56"
       ></p-select>
-      <p-button
-        label="Alterar"
-        (click)="alteraStatusCurriculoUser()"
-      ></p-button>
+      <p-button label="Alterar" (click)="alteraStatusCurriculoUser()"></p-button>
       <p-button label="Cancelar" (click)="visible = false"></p-button>
     </div>
     <form class="form_space">
       <p><strong>Nome:</strong> {{ profileForm.get("name")?.value }}</p>
       <p><strong>CPF:</strong> {{ profileForm.get("cpf")?.value }}</p>
-      <p>
-        <strong>Nascimento:</strong> {{ profileForm.get("nascimento")?.value }}
-      </p>
+      <p><strong>Nascimento:</strong> {{ profileForm.get("nascimento")?.value }}</p>
       <p><strong>Email:</strong> {{ profileForm.get("email")?.value }}</p>
       <p><strong>Telefone:</strong> {{ profileForm.get("telefone")?.value }}</p>
       <p><strong>Função:</strong> {{ profileForm.get("funcao")?.value }}</p>
-      <p>
-        <strong>Escolaridade:</strong>
-        {{ profileForm.get("escolaridadeEnum")?.value }}
-      </p>
-
+      <p><strong>Escolaridade:</strong>{{ profileForm.get("escolaridadeEnum")?.value }}</p>
       <table>
         <thead>
           <tr>

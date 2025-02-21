@@ -1,9 +1,9 @@
-package com.example.backend.service;
+package com.example.backend.service.competenciaService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.dto.competenciaDto.CompetenciaCadastroDto;
+import com.example.backend.dto.req.competenciaReqDto.CompetenciaCadastroReqDto;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.repository.CompetenciaRepository;
 
@@ -18,7 +18,7 @@ public class CompetenciaService {
         this.modelMapper = modelMapper;
     }
 
-    public CompetenciaModel findOrCreateCompetencia(CompetenciaCadastroDto competenciaCadastroDto) {
+    public CompetenciaModel findOrCreateCompetencia(CompetenciaCadastroReqDto competenciaCadastroDto) {
         CompetenciaModel dados = competenciaRepository.findByCompetenciaEnumAndNivelEnum(
                 competenciaCadastroDto.competenciaEnum(),
                 competenciaCadastroDto.nivelEnum());

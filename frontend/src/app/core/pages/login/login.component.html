@@ -4,7 +4,7 @@
   <app-input controlName="password" label="Password" />
 
   <div class="button">
-    <app-button [function]="loginUser.bind(this)" text="Login" />
+    <app-button [onClickFunction]="loginUser.bind(this)" text="Login" />
     <app-button routerLink="cadastro" text="criar conta" />
   </div>
 </div>

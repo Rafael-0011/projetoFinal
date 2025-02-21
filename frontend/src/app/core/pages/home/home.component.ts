@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
         this.profileForm.patchValue({
           name: response.name,
           cpf: response.cpf,
-          nascimento: response.nascimento,
+          nascimento: response.nascimento ? new Date(response.nascimento) : null,
           email: response.email,
           telefone: response.telefone,
           escolaridadeEnum: response.escolaridadeEnum,

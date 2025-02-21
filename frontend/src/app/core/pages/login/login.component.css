@@ -1,6 +1,7 @@
 .card {
   display: flexbox;
   justify-items: center;
+  margin-top: 10rem;
 }
 
 .button {

@@ -3,10 +3,22 @@ package com.example.backend.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.example.backend.enumerate.EscolaridadeEnum;
 import com.example.backend.enumerate.StatusEnum;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +37,7 @@ public class CurriculoModel {
   private Long id;
   private String name;
   @Column(nullable = false)
+  @CPF
   private String cpf;
   private LocalDate nascimento;
   @Column(nullable = false, unique = true)

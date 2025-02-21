@@ -8,6 +8,18 @@
     <app-input controlName="funcao" label="Funcao"></app-input>
 
     <div class="floatlabel_space">
+    <p-floatlabel variant="in">
+      <p-datepicker
+        formControlName="nascimento"
+        inputId="nascinascimentomento"
+        showIcon
+        iconDisplay="input"
+      />
+      <label for="nascimento">Nascimento</label>
+    </p-floatlabel>
+  </div>
+
+    <div class="floatlabel_space">
       <p-select
         [options]="escolaridade"   
         size="large"
@@ -44,17 +56,13 @@
     }
 
     <div class="floatlabel_space">
-      <p-select
-        [options]="status"
-        placeholder="Select Status"
-        class="w-full md:w-56"
-        formControlName="statusEnum"
-      />
+      <app-input controlName="statusEnum" label="Status"></app-input>
+
+  
     </div>
-
-
   </form>
- 
+
+  
 </div>
 <!--  <button (click)="toggleFormState(true)">AlteraDados</button>
 <button (click)="toggleFormState(false)">Comfimar</button>

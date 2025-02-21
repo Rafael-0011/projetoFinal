@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InputComponent } from '../../../shared/component/input/input.component';
 import { UserService } from '../../../infra/service/user.service';
@@ -13,7 +13,7 @@ import { UserService } from '../../../infra/service/user.service';
   styleUrl: './cadastro-user.component.css',
 })
 export class CadastroUserComponent {
-  profileForm: any;
+  profileForm: FormGroup;
 
   constructor(
     private buildForm: FormBuilder,

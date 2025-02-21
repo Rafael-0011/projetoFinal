@@ -35,7 +35,6 @@ export class LoginComponent {
 
   loginUser(): void {
     this.tokenJwt.expireToken();
-    localStorage.removeItem('token')
     this.loginService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.storage.set('token', response.token);

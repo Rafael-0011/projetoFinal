@@ -7,20 +7,23 @@ import java.util.function.Consumer;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.expression.ExpressionException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.backend.config.exceptionHandle.NotFoundException;
-import com.example.backend.dto.CurriculoDto.CurriculoAlterarDto;
-import com.example.backend.dto.CurriculoDto.CurriculoAlterarStatusDto;
-import com.example.backend.dto.CurriculoDto.CurriculoCadastraDto;
-import com.example.backend.dto.CurriculoDto.CurriculoListagemDto;
-import com.example.backend.dto.competenciaDto.CompetenciaCadastroDto;
+import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarReqDto;
+import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarStatusReqDto;
+import com.example.backend.dto.req.CurriculoReqDto.CurriculoCadastraReqDto;
+import com.example.backend.dto.req.competenciaReqDto.CompetenciaCadastroReqDto;
+import com.example.backend.dto.res.CurriculoDtoRes.CurriculoListagemResDto;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.model.CurriculoModel;
 import com.example.backend.repository.CurriculoRepository;
-import com.example.backend.service.CompetenciaService;
 import com.example.backend.service.GlobalService;
+import com.example.backend.service.competenciaService.CompetenciaService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CurriculoServiceImpl implements CurriculoService {
@@ -38,52 +41,55 @@ public class CurriculoServiceImpl implements CurriculoService {
     }
 
     @Override
-    public CurriculoModel atualizaStatus(Long id, CurriculoAlterarStatusDto alterarDto) {
+    public CurriculoModel obterCurriculoPeloEmail(String email) {
+        return curriculoRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currículo não encontrado"));
+    }
+
+    @Override
+    @Transactional
+    public CurriculoModel atualizaStatus(Long id, CurriculoAlterarStatusReqDto alterarDto) {
         CurriculoModel dadoObtido = curriculoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Currículo não encontrado"));
+            .orElseThrow(() -> new NotFoundException("Currículo não encontrado"));
+    
         dadoObtido.setStatusEnum(alterarDto.statusEnum());
-        return curriculoRepository.save(dadoObtido);
+        
+        return curriculoRepository.save(dadoObtido); // Atualiza no banco
     }
 
     @Override
-    public CurriculoModel atualizaCurriculo(Long id, CurriculoAlterarDto alterarDto) {
-        CurriculoModel dadoObtido = curriculoRepository.findById(alterarDto.id())
-                .orElseThrow(() -> new ExpressionException("Currículo não encontrado"));
-
-        atualizaCurriculo(alterarDto, dadoObtido);
-
-        return curriculoRepository.save(dadoObtido);
-
+    public CurriculoModel atualizaCurriculo(Long id, CurriculoAlterarReqDto alterarDto) {
+        var dado = obterCurriculo(alterarDto.id());
+        atualizaCurriculo(alterarDto, dado);   
+        return curriculoRepository.save(dado);
     }
 
     @Override
-    public CurriculoModel obterCurriculo(Long id) {
-        return curriculoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Currículo não encontrado"));
-    }
-
-    @Override
-    public Page<CurriculoListagemDto> paginacaoCurriculo(Pageable pageable) {
+    public Page<CurriculoListagemResDto> paginacaoCurriculo(Pageable pageable) {
         return curriculoRepository.findAll(pageable)
-                .map(CurriculoListagemDto::new);
-
+                .map(CurriculoListagemResDto::new);
     }
 
     @Override
-    public CurriculoModel cadastraCurriculo(CurriculoCadastraDto cadastraDto) {
+    public CurriculoModel cadastraCurriculo(CurriculoCadastraReqDto cadastraDto) {
         var validaDadoExistente = curriculoRepository.findByEmail(cadastraDto.email());
 
         if (validaDadoExistente.isPresent()) {
             throw new IllegalArgumentException("Currículo já cadastrado para este e-mail.");
         }
-
         var competencias = obterCompetencias(cadastraDto);
         CurriculoModel dado = modelMapper.map(cadastraDto, CurriculoModel.class);
         dado.setCompetencia(competencias);
         return curriculoRepository.save(dado);
     }
 
-    private void atualizaCurriculo(CurriculoAlterarDto alterarDto, CurriculoModel curriculoModel) {
+
+    @Override
+    public List<CurriculoModel> obterListaCurriculo() {
+        return curriculoRepository.findAll();
+    }
+
+    private void atualizaCurriculo(CurriculoAlterarReqDto alterarDto, CurriculoModel curriculoModel) {
         globalService.atualizaDados(alterarDto.name(), curriculoModel::setName);
         globalService.atualizaDados(alterarDto.cpf(), curriculoModel::setCpf);
         globalService.atualizaDados(alterarDto.nascimento(), curriculoModel::setNascimento);
@@ -94,13 +100,11 @@ public class CurriculoServiceImpl implements CurriculoService {
         atualizaCurriculo(alterarDto.competencia(), curriculoModel::setCompetencia);
     }
 
-    private void atualizaCurriculo(List<CompetenciaCadastroDto> competencia,
-            Consumer<List<CompetenciaModel>> setCompetencia) {
+    private void atualizaCurriculo(List<CompetenciaCadastroReqDto> competencia,
+                                   Consumer<List<CompetenciaModel>> setCompetencia) {
         if (competencia != null && !competencia.isEmpty()) {
-
             List<CompetenciaModel> competencias = new ArrayList<>();
-
-            for (CompetenciaCadastroDto dto : competencia) {
+            for (CompetenciaCadastroReqDto dto : competencia) {
                 CompetenciaModel model = competenciaService.findOrCreateCompetencia(dto);
                 competencias.add(model);
             }
@@ -108,25 +112,18 @@ public class CurriculoServiceImpl implements CurriculoService {
         }
     }
 
-    private List<CompetenciaModel> obterCompetencias(CurriculoCadastraDto cadastraDto) {
+    private List<CompetenciaModel> obterCompetencias(CurriculoCadastraReqDto cadastraDto) {
         List<CompetenciaModel> dado = new ArrayList<>();
-
-        for (CompetenciaCadastroDto dto : cadastraDto.competencia()) {
+        for (CompetenciaCadastroReqDto dto : cadastraDto.competencia()) {
             CompetenciaModel competencia = competenciaService.findOrCreateCompetencia(dto);
             dado.add(competencia);
         }
-
         return dado;
     }
 
-    @Override
-    public CurriculoModel obterCurriculoPeloEmail(String email) {
-        return curriculoRepository.findByEmail(email)
-        .orElseThrow(() -> new NotFoundException("Currículo não encontrado"));
+    private CurriculoModel obterCurriculo(Long id) {
+        return curriculoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currículo não encontrado"));
     }
 
-    @Override
-    public List<CurriculoModel> obterListaCurriculo() {
-        return curriculoRepository.findAll();
-    }
 }

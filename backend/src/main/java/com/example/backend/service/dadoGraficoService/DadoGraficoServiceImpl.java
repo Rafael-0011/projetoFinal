@@ -3,9 +3,9 @@ package com.example.backend.service.dadoGraficoService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.backend.dto.req.GraficosReqDto.ObterDadoGraficoReqDto;
 import org.springframework.stereotype.Service;
 
-import com.example.backend.dto.GraficosDto.ObterDadoGraficoDto;
 import com.example.backend.repository.CurriculoRepository;
 
 @Service
@@ -17,20 +17,20 @@ public class DadoGraficoServiceImpl implements DadoGraficoService {
     }
 
     @Override
-    public List<ObterDadoGraficoDto> dadosGraficoEscolaridade() {
+    public List<ObterDadoGraficoReqDto> dadosGraficoEscolaridade() {
         return curriculoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(d -> d.getEscolaridadeEnum().toString(), Collectors.counting()))
                 .entrySet().stream()
-                .map(d -> new ObterDadoGraficoDto(d.getKey(), d.getValue()))
+                .map(d -> new ObterDadoGraficoReqDto(d.getKey(), d.getValue()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ObterDadoGraficoDto> dadosGraficoStatus() {
+    public List<ObterDadoGraficoReqDto> dadosGraficoStatus() {
         return curriculoRepository.findAll().stream()
                 .collect(Collectors.groupingBy(d -> d.getStatusEnum().toString(), Collectors.counting()))
                 .entrySet().stream()
-                .map(d -> new ObterDadoGraficoDto(d.getKey(), d.getValue()))
+                .map(d -> new ObterDadoGraficoReqDto(d.getKey(), d.getValue()))
                 .collect(Collectors.toList());
     }
 }
