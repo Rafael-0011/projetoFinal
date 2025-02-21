@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InputComponent } from '../../../shared/component/input/input.component';
 import { UserService } from '../../../infra/service/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cadastro-user',
@@ -32,8 +33,12 @@ export class CadastroUserComponent {
         alert("Conta criada")
         this.route.navigate(['/']);
       },
-      error: (err) => {
-        console.log(err, 'ocorre erro ao cadastra');
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 409) {
+          alert('E-mail já cadastrado. Por favor, use outro e-mail.');
+        } else {
+          alert('Ocorreu um erro ao cadastrar. Tente novamente mais tarde.');
+        }
       },
     });
   }
