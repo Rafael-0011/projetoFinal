@@ -62,8 +62,12 @@
     </div>
   </form>
 
-  
+  @if (isEdita == false) {
+    <app-button (click)="alteraDados()" text="Alterar"/>
+  }@else {
+    <app-button (click)="comfirmar()" text="Cofirmar"/>
+  }
 </div>
-<!--  <button (click)="toggleFormState(true)">AlteraDados</button>
-<button (click)="toggleFormState(false)">Comfimar</button>
+<!--  
+
 -->

@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.modelMapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.record.RecordModule;

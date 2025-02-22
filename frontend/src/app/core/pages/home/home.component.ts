@@ -20,6 +20,7 @@ import { TokenJwt } from '../../../infra/auth/jwt';
 })
 export class HomeComponent implements OnInit {
   profileForm: FormGroup;
+  isEdita:boolean = false;
 
   niveis = niveisEnum();
   competencias = competenciasEnum();
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit {
     private tokenJwt: TokenJwt
   ) {
     this.profileForm = this.buildForm.group({
+      id:[''],
       name: [''],
       cpf: [''],
       nascimento: [''],
@@ -56,10 +58,9 @@ export class HomeComponent implements OnInit {
     (this.profileForm.get('competencia') as FormArray).removeAt(index);
   }
 
-  isEdita:any;
   toggleFormState(altera:boolean): void {
     this.isEdita = altera;
-    if (this.isEdita  === true) {
+    if (this.isEdita === true) {
       this.profileForm.enable();
       const data = this.profileForm.get('statusEnum') as FormGroup;
       data?.disable();
@@ -68,6 +69,17 @@ export class HomeComponent implements OnInit {
       const data = this.profileForm.get('statusEnum') as FormGroup;
       data?.disable();
     }
+  }
+
+  alteraDados(){
+    console.log(this.profileForm.get('name')?.value);
+    this.toggleFormState(true) 
+   }
+
+  comfirmar(){
+    alert("dados alterados")
+    console.log(this.profileForm.get('name')?.value);
+    this.toggleFormState(false) 
   }
 
   carregarDadosUsuario(): void {
@@ -85,8 +97,7 @@ export class HomeComponent implements OnInit {
               competenciaEnum: [item.competenciaEnum],
               nivelEnum: [item.nivelEnum],
             })
-        );
-
+        );        
         this.profileForm.patchValue({
           name: response.name,
           cpf: response.cpf,

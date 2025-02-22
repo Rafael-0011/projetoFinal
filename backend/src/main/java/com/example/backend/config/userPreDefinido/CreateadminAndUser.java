@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.userPreDefinido;
 
 
 import com.example.backend.model.UserModel;
