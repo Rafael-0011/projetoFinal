@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.example.backend.enumerate.EscolaridadeEnum;
 import com.example.backend.enumerate.StatusEnum;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
@@ -36,14 +36,11 @@ public class CurriculoModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  @Column(nullable = false)
   @CPF
   private String cpf;
   private LocalDate nascimento;
-  @Column(nullable = false, unique = true)
-  @Email(regexp = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*$")
+  @Email
   private String email;
-  @Column(nullable = false)
   private String telefone;
   @Enumerated(EnumType.STRING)
   private EscolaridadeEnum escolaridadeEnum;
@@ -53,5 +50,10 @@ public class CurriculoModel {
   private List<CompetenciaModel> competencia;
   @Enumerated(EnumType.STRING)
   private StatusEnum statusEnum = StatusEnum.AGUARDANDO;
+  @OneToOne()
+  @JoinColumn(name = "user_id", unique = true)
+  private UserModel user;
+ 
+
 
 }

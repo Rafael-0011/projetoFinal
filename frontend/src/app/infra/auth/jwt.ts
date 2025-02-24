@@ -41,6 +41,10 @@ export class TokenJwt {
     return this.getTokenDecoded()?.sub || false;
   }
 
+  getIdFromToken(): number | 0 {
+    return this.getTokenDecoded()?.id || 0;
+  }
+
   hasRole(role: string): boolean {
     return this.getTokenDecoded()?.authorities?.includes(role) || false;
   }

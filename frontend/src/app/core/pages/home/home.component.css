@@ -4,29 +4,15 @@
     align-items: center;
     margin-top: 10rem;
     border-radius: 10px;
-
 }
-.form_space{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;  
 
-}
 .floatlabel_space{
-    margin-bottom: 0.5rem;
-    
+    margin-bottom: 0.5rem;  
 }
+
 .flex_select{
     display: flex;
     column-gap: 0.2rem;
+}
 
-}
-.input_width{
-    width: 30rem;
-}
-.select_width{
-    width: 30rem;
-}
-.select_competencia_width{
-    width: 10rem;
-}
+

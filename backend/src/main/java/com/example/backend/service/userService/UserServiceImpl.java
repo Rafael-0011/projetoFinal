@@ -2,11 +2,13 @@ package com.example.backend.service.userService;
 
 import com.example.backend.dto.req.UserReqDto.UserCadastroReqDto;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.backend.model.UserModel;
 import com.example.backend.repository.UserRepository;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,4 +30,11 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(loginDados);
     }
+    @Override
+    public UserModel obterCurriculoPeloIdUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User não encontrado"));
+    }
+
+
 }

@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './core/pages/login/login.component';
-import { FormularioCurriculoComponent } from './core/pages/formulario-curriculo/formulario-curriculo.component';
 import { HomeAdminComponent } from './core/pages/home-admin/home-admin.component';
 import { CadastroUserComponent } from './core/pages/cadastro-user/cadastro-user.component';
 import { HomeComponent } from './core/pages/home/home.component';
 import { authGuard, authGuardAdmin } from './infra/guard/auth.guard';
+import { CadastroCurriculoComponent } from './core/pages/cadastro-curriculo/cadastro-curriculo.component';
 
 export const routes: Routes = [
   {
-    path: 'curriculo',
-    component: FormularioCurriculoComponent,
+    path: 'cadastroCurriculo',
+    component: CadastroCurriculoComponent,
     canActivate: [authGuard],
   },
 
@@ -25,7 +25,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'cadastro',
+    path: 'cadastroUser',
     component: CadastroUserComponent,
   },
 

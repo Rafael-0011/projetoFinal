@@ -1,0 +1,69 @@
+<div class="card">
+    <h1>Cadastra Curriculo</h1>
+  
+    <form [formGroup]="profileForm" class="input_space">
+      <app-input controlName="name" label="Name"></app-input>
+      <app-input controlName="cpf" label="cpf"></app-input>
+      <app-input controlName="email" label="Email"></app-input>
+      <app-input controlName="telefone" label="Telefone"></app-input>
+      <app-input controlName="funcao" label="Funcao"></app-input>
+   
+      <p-floatlabel variant="in">
+        <p-datepicker
+          formControlName="nascimento"
+          inputId="nascinascimentomento"
+          showIcon
+          iconDisplay="input"
+        />
+        <label for="nascimento">Nascimento</label>
+      </p-floatlabel>
+      <app-custom-validation-message controlName="nascimento" />
+  
+      <p-select
+        [options]="escolaridade"
+        size="large"
+        placeholder="Escolaridade"
+        class="w-full md:w-56"
+        formControlName="escolaridadeEnum"
+        class="select_width"
+      />
+      <app-custom-validation-message controlName="escolaridadeEnum" />
+  
+      @for (item of itemsSnacks; track item; let i = $index) {
+      <div [formGroup]="item">
+        <div class="flex_select floatlabel_space">
+          <p-select
+            [options]="competencias"
+            placeholder="Competencia"
+            class="w-full md:w-56"
+            formControlName="competenciaEnum"
+          />
+          <p-select
+            [options]="niveis"
+            placeholder="Nivel"
+            class="w-full md:w-56"
+            formControlName="nivelEnum"
+          />
+  
+          <p-button
+            (click)="removeSnack(i)"
+            label="Remover"
+            [raised]="true"
+            severity="warn"
+          />
+        </div>
+      </div>
+  
+      }
+      <app-button
+        [onClickFunction]="addSnacks.bind(this)"
+        text="Add Competencia"
+      ></app-button>
+  
+      <app-button
+        [onClickFunction]="cadastraCurriculo.bind(this)"
+        text="Cadastra"
+      ></app-button>
+    </form>
+  </div>
+  

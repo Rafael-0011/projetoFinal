@@ -15,4 +15,9 @@ export class UserService {
     const url = `${environment.URL_USER + environment.CADASTRO}`
     return this.http.post<CadastroUserModel>(`${url}`, user);
   }
+
+  obterCurriculoPeloUserId(id: number): Observable<any> {
+    const url = `${environment.URL_USER}/${id}`;
+    return this.http.get<any>(`${url}`);
+  }
 }

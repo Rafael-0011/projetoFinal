@@ -1,11 +1,9 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.res.CurriculoDtoRes.CurriculoListagemResDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.backend.dto.req.UserReqDto.UserCadastroReqDto;
 import com.example.backend.dto.res.MessageRes.MessageResponse;
@@ -27,6 +25,12 @@ public class UserController {
     public ResponseEntity<MessageResponse> cadastraUser(@RequestBody UserCadastroReqDto userCadastroDto) {
         userService.cadastraUser(userCadastroDto);
         return ResponseEntity.ok(new MessageResponse("Usuario Criado Com Sucesso"));
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<CurriculoListagemResDto> obterCurriculoPeloIdUser(@PathVariable Long id) {
+        return ResponseEntity.ok(new CurriculoListagemResDto(userService.obterCurriculoPeloIdUser(id).getCurriculo()));
     }
 
 }

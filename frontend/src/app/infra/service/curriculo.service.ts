@@ -31,17 +31,22 @@ export class CurriculoService {
     id: number,
     curriculo: AlteraStatusModel
   ): Observable<AlteraStatusModel> {
-    const url = `${environment.URL_FORM + environment.ALTERA_ADMIN}`;
-    return this.http.put<AlteraStatusModel>(`${url}/${id}`, curriculo);
+    const url = `${environment.URL_FORM + environment.ALTERA_ADMIN}/${id}`;
+    return this.http.put<AlteraStatusModel>(`${url}`, curriculo);
   }
 
-  obterCurriculoPorEmail(email: string): Observable<any> {
-    const url = `${environment.URL_FORM}`;
-    return this.http.get<any>(`${url}/${email}`);
+  obterCurriculoPeloCurriculoId(id: number): Observable<any> {
+    const url = `${environment.URL_FORM}/${id}`;
+    return this.http.get<any>(`${url}`);
   }
 
   obterListaCurriculo(): Observable<any> {
     const url = `${environment.URL_FORM}`;
     return this.http.get<any>(url);
+  }
+
+  alterarCurriculo(obj:any): Observable<any> {
+    const url = `${environment.URL_FORM}/user`;
+    return this.http.put<any>(url,obj);
   }
 }

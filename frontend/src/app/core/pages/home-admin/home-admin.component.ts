@@ -14,10 +14,11 @@ import {
 import { AlteraStatusModel } from '../../../module/model/altera-status-model';
 import { CompotenciaModal } from '../../../module/model/competencia-moral';
 import { competenciasEnum } from '../../../shared/dadoEnum/dados-enum';
+import { UserTableComponent } from "../../../shared/component/user-table/user-table.component";
 
 @Component({
   selector: 'app-home-admin',
-  imports: [BaseModule, PrimeNgModule],
+  imports: [BaseModule, PrimeNgModule, UserTableComponent],
   templateUrl: './home-admin.component.html',
   styleUrl: './home-admin.component.css',
 })
@@ -45,9 +46,10 @@ export class HomeAdminComponent {
   constructor(
     private buildForm: FormBuilder,
     private graficoService: GraficoService,
-    private curriculoService: CurriculoService
+    private curriculoService: CurriculoService,
   ) {
     this.profileForm = this.buildForm.group({
+      id: [''],
       name: [''],
       cpf: [''],
       nascimento: [''],
@@ -71,12 +73,11 @@ export class HomeAdminComponent {
       this.graficBarDatasets = [{ label: 'Escolaridade', data: [] }];
 
       data.dadoGrafico.forEach((i) => {
-
         const labelEncontrado = escolaridadeEnum().find(
           (nivel) => nivel.value === i.dado
         )?.label;
-        
-        this.graficBarLabels.push(labelEncontrado|| "Desconhecido");
+
+        this.graficBarLabels.push(labelEncontrado || 'Desconhecido');
         this.graficBarDatasets[0].data.push(i.quantidade);
       });
     });
@@ -99,24 +100,40 @@ export class HomeAdminComponent {
       this.listUser = data;
 
       this.customers = data.map((item: any) => ({
+        id: item.id,
         name: item.name,
         email: item.email,
         funcao: item.funcao,
         status: item.statusEnum,
+        user: item.user,
       }));
     });
+  }
+
+  openDialog(index: number): void {
+    if (index >= 0 && index < this.listUser.length) {
+      this.selectedIndex = index;
+      const id = this.listUser[index].id;
+      this.carregarDadoCurriculoUsuario(id);
+      this.visible = true;
+    } else {
+      console.error('Invalid index:', index);
+    }
   }
 
   alteraStatusCurriculoUser(): void {
     if (this.selectedIndex >= 0 && this.selectedIndex < this.listUser.length) {
       const user = this.listUser[this.selectedIndex];
+
       if (user) {
-        user.statusEnum = this.profileForm.get('statusEnum')?.value || StatusEnum.AGUARDANDO;
+        user.statusEnum =
+          this.profileForm.get('statusEnum')?.value || StatusEnum.AGUARDANDO;
         this.curriculoService
           .alteraStatusCurriculo(user.id, user)
           .subscribe(() => {
             this.getDadosGraficoStatus();
             this.getListUsuariosParaTabela();
+            this.visible = false;
           });
 
       } else {
@@ -127,23 +144,12 @@ export class HomeAdminComponent {
     }
   }
 
-  openDialog(index: number): void {
-    if (index >= 0 && index < this.listUser.length) {
-      this.selectedIndex = index;
-      const email = this.listUser[index].email;
-      this.carregarDadoCurriculoUsuario(email);
-      this.visible = true;
-    } else {
-      console.error('Invalid index:', index);
-    }
-  }
-
-  carregarDadoCurriculoUsuario(email: string): void {
-    if (!email) {
-      console.error('Email não encontrado');
+  carregarDadoCurriculoUsuario(id: number): void {
+    if (!id) {
+      console.error('Id dos usuarios não encontrado');
       return;
     }
-    this.curriculoService.obterCurriculoPorEmail(email).subscribe({
+    this.curriculoService.obterCurriculoPeloCurriculoId(id).subscribe({
       next: (response) => {
         const competenciasFormGroups: FormGroup[] = response.competencia.map(
           (item: CompotenciaModal) =>

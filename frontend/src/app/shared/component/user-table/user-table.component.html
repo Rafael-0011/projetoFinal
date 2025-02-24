@@ -1,0 +1,31 @@
+<div class="flex justify-content-center py-4">
+    <p-table
+      [value]="customers"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template #header>
+        <tr>
+          <th style="width: 25%">Nome</th>
+          <th style="width: 25%">Email</th>
+          <th style="width: 25%">Função</th>
+          <th style="width: 25%">Status</th>
+          <th style="width: 25%">Ações</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-customer let-i="rowIndex">
+        <tr>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.funcao }}</td>
+          <td>{{ customer.status }}</td>
+          <td>
+            <p-button (click)="openDialog(i)" label="Alterar"></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  

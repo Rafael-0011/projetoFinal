@@ -1,16 +1,16 @@
 package com.example.backend.dto.res.CurriculoDtoRes;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.example.backend.enumerate.EscolaridadeEnum;
 import com.example.backend.enumerate.StatusEnum;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.model.CurriculoModel;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public record CurriculoListagemResDto(Long id, String name, String cpf, LocalDate nascimento, String email,
         String telefone, EscolaridadeEnum escolaridadeEnum, String funcao,
-        List<CompetenciaModel> competencia, StatusEnum statusEnum) {
+        List<CompetenciaModel> competencia, StatusEnum statusEnum, Long user) {
 
     public CurriculoListagemResDto(CurriculoModel dadosCadastrado) {
         this(
@@ -23,7 +23,10 @@ public record CurriculoListagemResDto(Long id, String name, String cpf, LocalDat
                 dadosCadastrado.getEscolaridadeEnum(),
                 dadosCadastrado.getFuncao(),
                 dadosCadastrado.getCompetencia(),
-                dadosCadastrado.getStatusEnum());
+                dadosCadastrado.getStatusEnum(),
+                dadosCadastrado.getUser().getId()
+        );
+
     }
 
 }

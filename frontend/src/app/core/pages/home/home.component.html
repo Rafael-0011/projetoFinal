@@ -8,29 +8,27 @@
     <app-input controlName="funcao" label="Funcao"></app-input>
 
     <div class="floatlabel_space">
-    <p-floatlabel variant="in">
-      <p-datepicker
-        formControlName="nascimento"
-        inputId="nascinascimentomento"
-        showIcon
-        iconDisplay="input"
-      />
-      <label for="nascimento">Nascimento</label>
-    </p-floatlabel>
-  </div>
-
+      <p-floatlabel variant="in">
+        <p-datepicker
+          formControlName="nascimento"
+          inputId="nascimento"
+          showIcon
+          dateFormat="dd/mm/yy"
+          [showTime]="false"
+          />
+        <label for="nascimento">Nascimento</label>
+      </p-floatlabel>
+    </div>
     <div class="floatlabel_space">
       <p-select
-        [options]="escolaridade"   
+        [options]="escolaridade"
         size="large"
         placeholder="Escolaridade"
         class="w-full md:w-56"
         formControlName="escolaridadeEnum"
-        class="select_width"
       />
     </div>
-
-    @for (item of itemsSnacks; track item; let i = $index) {
+    @for (item of itemsSnacks; track $index;let i = $index) {
     <div [formGroup]="item">
       <div class="flex_select floatlabel_space">
         <p-select
@@ -38,34 +36,41 @@
           placeholder="Competencia"
           class="w-full md:w-56"
           formControlName="competenciaEnum"
-          class="select_competencia_width"
         />
         <p-select
           [options]="niveis"
           placeholder="Nivel"
-          class="w-full md:w-56"
+          class="w-full md:w-100"
           formControlName="nivelEnum"
-          class="select_competencia_width"
         />
 
-        <button (click)="removeSnack(i)" class="select_competencia_width">
-          Remover
-        </button>
+        @if (isEdita == true) {
+        <p-button
+          (click)="removeSnack(i)"
+          label="Remover"
+          [raised]="true"
+          severity="warn"
+        />
+        }
       </div>
     </div>
+    } @if (isEdita == true) {
+    <app-button
+      class="floatlabel_space"
+      [onClickFunction]="addSnacks.bind(this)"
+      text="Add Competencia"
+    />
     }
 
     <div class="floatlabel_space">
-      <app-input controlName="statusEnum" label="Status"></app-input>
-
-  
+      <app-input controlName="statusEnum" label="Status" />
     </div>
   </form>
 
   @if (isEdita == false) {
-    <app-button (click)="alteraDados()" text="Alterar"/>
+  <app-button (click)="alteraDados()" text="Alterar" />
   }@else {
-    <app-button (click)="comfirmar()" text="Cofirmar"/>
+  <app-button (click)="comfirmar()" text="Cofirmar" />
   }
 </div>
 <!--  

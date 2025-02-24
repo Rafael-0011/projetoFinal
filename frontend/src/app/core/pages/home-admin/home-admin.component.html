@@ -11,36 +11,10 @@
   ></app-chart-pie>
 </div>
 
-<div class="flex justify-content-center py-4">
-  <p-table
-    [value]="customers"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]"
-  >
-    <ng-template #header>
-      <tr>
-        <th style="width: 25%">Nome</th>
-        <th style="width: 25%">Email</th>
-        <th style="width: 25%">Função</th>
-        <th style="width: 25%">Status</th>
-        <th style="width: 25%">Ações</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-customer let-i="rowIndex">
-      <tr>
-        <td>{{ customer.name }}</td>
-        <td>{{ customer.email }}</td>
-        <td>{{ customer.funcao }}</td>
-        <td>{{ customer.status }}</td>
-        <td>
-          <p-button (click)="openDialog(i)" label="Alterar"></p-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+<app-user-table
+[customers]="customers"
+(alterUser)="openDialog($event)"
+></app-user-table>
 
 <p-dialog
   header="Dados usuário"
@@ -61,29 +35,27 @@
       <p-button label="Cancelar" (click)="visible = false"></p-button>
     </div>
     <form class="form_space">
-      <p><strong>Nome:</strong> {{ profileForm.get("name")?.value }}</p>
-      <p><strong>CPF:</strong> {{ profileForm.get("cpf")?.value }}</p>
-      <p><strong>Nascimento:</strong> {{ profileForm.get("nascimento")?.value }}</p>
-      <p><strong>Email:</strong> {{ profileForm.get("email")?.value }}</p>
-      <p><strong>Telefone:</strong> {{ profileForm.get("telefone")?.value }}</p>
-      <p><strong>Função:</strong> {{ profileForm.get("funcao")?.value }}</p>
-      <p><strong>Escolaridade:</strong>{{ profileForm.get("escolaridadeEnum")?.value }}</p>
+      <p><strong>Nome: </strong> {{ profileForm.get("name")?.value }}</p>
+      <p><strong>CPF: </strong> {{ profileForm.get("cpf")?.value }}</p>
+      <p><strong>Nascimento: </strong> {{ profileForm.get("nascimento")?.value }}</p>
+      <p><strong>Email: </strong> {{ profileForm.get("email")?.value }}</p>
+      <p><strong>Telefone: </strong> {{ profileForm.get("telefone")?.value }}</p>
+      <p><strong>Função: </strong> {{ profileForm.get("funcao")?.value }}</p>
+      <p><strong>Escolaridade: </strong>{{ profileForm.get("escolaridadeEnum")?.value }}</p>
       <table>
         <thead>
           <tr>
-            <th>Competência</th>
-            <th>Nível</th>
+            <th class="pr-4">Competência</th> 
+            <th class="pr-4">Nível</th> 
           </tr>
         </thead>
         <tbody>
-          @for (item of itemsSnacks; track i; let i = $index) {
-          <tr>
-            <td>{{ item.get("competenciaEnum")?.value }}</td>
-            <td>{{ item.get("nivelEnum")?.value }}</td>
+          <tr *ngFor="let item of itemsSnacks">
+            <td class="pr-4">{{ item.get("competenciaEnum")?.value }}</td> 
+            <td class="pr-4">{{ item.get("nivelEnum")?.value }}</td> 
           </tr>
-          }
         </tbody>
-      </table>
+      </table>      
     </form>
   </div>
 </p-dialog>

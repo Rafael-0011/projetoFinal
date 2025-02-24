@@ -1,4 +1,5 @@
 export class UserProfile {
+  id: number;
   name: string;
   cpf: string;
   nascimento: string;
@@ -10,6 +11,7 @@ export class UserProfile {
   competencia: string[];
 
   constructor(data?: Partial<UserProfile>) {
+    this.id = data?.id || 0;
     this.name = data?.name || '';
     this.cpf = data?.cpf || '';
     this.nascimento = data?.nascimento || '';

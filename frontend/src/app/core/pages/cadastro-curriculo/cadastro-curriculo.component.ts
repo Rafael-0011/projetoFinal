@@ -1,30 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { BaseModule } from '../../../shared/base/base.module';
-import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TokenJwt } from '../../../infra/auth/jwt';
+import { CurriculoService } from '../../../infra/service/curriculo.service';
 import {
+  niveisEnum,
   competenciasEnum,
   escolaridadeEnum,
-  niveisEnum,
 } from '../../../shared/dadoEnum/dados-enum';
-import { CustomValidationMessageComponent } from '../../../shared/component/custom-validation-message/custom-validation-message.component';
 import { InputComponent } from '../../../shared/component/input/input.component';
-import { CurriculoService } from '../../../infra/service/curriculo.service';
-import { TokenJwt } from '../../../infra/auth/jwt';
+import { BaseModule } from '../../../shared/base/base.module';
+import { CustomValidationMessageComponent } from '../../../shared/component/custom-validation-message/custom-validation-message.component';
+import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
 
 @Component({
-  selector: 'app-formulario-curriculo',
+  selector: 'app-cadastro-curriculo',
   imports: [
     BaseModule,
     PrimeNgModule,
     CustomValidationMessageComponent,
     InputComponent,
   ],
-  templateUrl: './formulario-curriculo.component.html',
-  styleUrl: './formulario-curriculo.component.css',
+  templateUrl: './cadastro-curriculo.component.html',
+  styleUrl: './cadastro-curriculo.component.css',
 })
-export class FormularioCurriculoComponent implements OnInit {
+export class CadastroCurriculoComponent {
   profileForm: FormGroup;
   niveis = niveisEnum();
   competencias = competenciasEnum();
@@ -50,6 +50,7 @@ export class FormularioCurriculoComponent implements OnInit {
       escolaridadeEnum: ['', Validators.required],
       funcao: ['', Validators.required],
       competencia: this.buildForm.array([]),
+      user: [''],
     });
   }
 
@@ -62,8 +63,16 @@ export class FormularioCurriculoComponent implements OnInit {
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
+    const id = this.tokenJwt.getIdFromToken();
+    if (!id) {
+      alert('Erro: Usuário não autenticado.');
+      this.route.navigate(['/login']);
+      return;
+    }
 
-    this.curriculoService.cadastroCurriculo(this.profileForm.value).subscribe({
+    const curriculoData = { ...this.profileForm.value, user: id };
+
+    this.curriculoService.cadastroCurriculo(curriculoData).subscribe({
       next: (response) => {
         alert('Curriculo Castrado');
         this.route.navigate(['/homeUser']);

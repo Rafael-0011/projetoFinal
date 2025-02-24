@@ -4,4 +4,5 @@ export class AlteraStatusModel {
   id!: number;
   email!: string;
   statusEnum!: StatusEnum;
+  user!:number;
 }

@@ -9,6 +9,7 @@ import { InputComponent } from '../../../shared/component/input/input.component'
 import { LoginService } from '../../../infra/service/login.service';
 import { CurriculoService } from '../../../infra/service/curriculo.service';
 import { TokenJwt } from '../../../infra/auth/jwt';
+import { UserService } from '../../../infra/service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,8 @@ export class LoginComponent {
     private storage: StorageService,
     private router: Router,
     private builderForm: FormBuilder,
-    private tokenJwt: TokenJwt
+    private tokenJwt: TokenJwt,
+    private userService: UserService
   ) {
     this.loginForm = this.builderForm.group({
       email: ['', Validators.required],
@@ -35,25 +37,28 @@ export class LoginComponent {
 
   loginUser(): void {
     this.tokenJwt.expireToken();
+    if (this.loginForm.invalid) {
+      alert('dados faltando');
+      return;
+    }
     this.loginService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.storage.set('token', response.token);
-        const email = this.loginForm.get('email')?.value;
         const authTokenRoleAdmin = this.tokenJwt.getAuthAdminToken();
+        const id = this.tokenJwt.getIdFromToken();
 
         if (authTokenRoleAdmin) {
           this.router.navigate(['/homeAdmin']);
           return;
         }
-
-        if (email) {
-          this.curriculoService.obterCurriculoPorEmail(email!).subscribe({
+        if (id) {
+          this.userService.obterCurriculoPeloUserId(id).subscribe({
             next: () => {
               this.router.navigate(['/homeUser']);
             },
-            error: () => {
-              this.router.navigate(['/curriculo']);
-            },
+            error:()=>{
+              this.router.navigate(['/cadastroCurriculo']);
+            }
           });
         }
       },

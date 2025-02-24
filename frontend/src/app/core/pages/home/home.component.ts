@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseModule } from '../../../shared/base/base.module';
 import { PrimeNgModule } from '../../../shared/prime-ng/prime-ng.module';
-import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { FormBuilder, FormArray, FormGroup, Validators } from '@angular/forms';
 import { CurriculoService } from '../../../infra/service/curriculo.service';
 import {
   niveisEnum,
@@ -11,6 +11,8 @@ import {
 } from '../../../shared/dadoEnum/dados-enum';
 import { InputComponent } from '../../../shared/component/input/input.component';
 import { TokenJwt } from '../../../infra/auth/jwt';
+import { UserService } from '../../../infra/service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,7 @@ import { TokenJwt } from '../../../infra/auth/jwt';
 })
 export class HomeComponent implements OnInit {
   profileForm: FormGroup;
-  isEdita:boolean = false;
+  isEdita: boolean = false;
 
   niveis = niveisEnum();
   competencias = competenciasEnum();
@@ -35,10 +37,12 @@ export class HomeComponent implements OnInit {
   constructor(
     private buildForm: FormBuilder,
     private curriculoService: CurriculoService,
-    private tokenJwt: TokenJwt
+    private tokenJwt: TokenJwt,
+    private userService: UserService,
+    private route: Router
   ) {
     this.profileForm = this.buildForm.group({
-      id:[''],
+      id: [''],
       name: [''],
       cpf: [''],
       nascimento: [''],
@@ -58,7 +62,15 @@ export class HomeComponent implements OnInit {
     (this.profileForm.get('competencia') as FormArray).removeAt(index);
   }
 
-  toggleFormState(altera:boolean): void {
+  addSnacks() {
+    const newa = this.buildForm.group({
+      competenciaEnum: ['', Validators.required],
+      nivelEnum: ['', Validators.required],
+    });
+    return (this.profileForm.get('competencia') as FormArray).push(newa);
+  }
+
+  toggleFormState(altera: boolean): void {
     this.isEdita = altera;
     if (this.isEdita === true) {
       this.profileForm.enable();
@@ -71,25 +83,49 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  alteraDados(){
-    console.log(this.profileForm.get('name')?.value);
-    this.toggleFormState(true) 
-   }
+  alteraDados() {
+    this.toggleFormState(true);
+  }
 
-  comfirmar(){
-    alert("dados alterados")
-    console.log(this.profileForm.get('name')?.value);
-    this.toggleFormState(false) 
+  comfirmar() {
+    this.toggleFormState(false);
+    this.alteraCurriculo();
+  }
+
+  alteraCurriculo(): void {
+    const id = this.tokenJwt.getIdFromToken();
+    if (this.profileForm.invalid) {
+      alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+    if (!id) {
+      alert('Erro: Usuário não autenticado.');
+      this.route.navigate(['/login']);
+      return;
+    }
+    const curriculoData = { ...this.profileForm.value };
+    this.curriculoService.alterarCurriculo(curriculoData).subscribe({
+      next: (response) => {
+        this.carregarDadosUsuario();
+        alert('Currículo atualizado com sucesso!');
+      },
+      error: (err) => {
+        const errorMessage =
+          err?.error?.message ||
+          'Erro ao atualizar currículo. Tente novamente mais tarde.';
+        alert(errorMessage);
+      },
+    });
   }
 
   carregarDadosUsuario(): void {
-    const email = this.tokenJwt.getEmailFromToken();
-    if (!email) {
+    const id = this.tokenJwt.getIdFromToken();
+    if (!id) {
       console.error('Email não encontrado no token');
       return;
     }
 
-    this.curriculoService.obterCurriculoPorEmail(email).subscribe({
+    this.userService.obterCurriculoPeloUserId(id).subscribe({
       next: (response) => {
         const competenciasFormGroups: FormGroup[] = response.competencia.map(
           (item: any) =>
@@ -97,11 +133,13 @@ export class HomeComponent implements OnInit {
               competenciaEnum: [item.competenciaEnum],
               nivelEnum: [item.nivelEnum],
             })
-        );        
+        );
+
         this.profileForm.patchValue({
+          id: response.id,
           name: response.name,
           cpf: response.cpf,
-          nascimento: response.nascimento ? new Date(response.nascimento) : null,
+          nascimento: response.nascimento ? new Date(response.nascimento + 'T12:00:00') : null,
           email: response.email,
           telefone: response.telefone,
           escolaridadeEnum: response.escolaridadeEnum,
@@ -124,4 +162,6 @@ export class HomeComponent implements OnInit {
       error: (err) => console.error('Erro ao carregar usuário:', err),
     });
   }
+
+
 }

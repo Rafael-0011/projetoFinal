@@ -10,6 +10,5 @@ import com.example.backend.model.CurriculoModel;
 @Repository
 public interface CurriculoRepository extends JpaRepository<CurriculoModel, Long> {
     Optional<CurriculoModel> findByEmail(String email);
-    Optional<CurriculoModel> findByCpf(String cpf);
 
 }

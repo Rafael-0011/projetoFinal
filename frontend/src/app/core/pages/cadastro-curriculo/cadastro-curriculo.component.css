@@ -19,12 +19,15 @@
     column-gap: 0.2rem;
 
 }
+
 .input_width{
     width: 30rem;
 }
+
 .select_width{
     width: 30rem;
 }
+
 .select_competencia_width{
     width: 10rem;
 }

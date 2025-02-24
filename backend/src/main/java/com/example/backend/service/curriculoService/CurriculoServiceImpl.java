@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.example.backend.model.UserModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import com.example.backend.dto.res.CurriculoDtoRes.CurriculoListagemResDto;
 import com.example.backend.model.CompetenciaModel;
 import com.example.backend.model.CurriculoModel;
 import com.example.backend.repository.CurriculoRepository;
+import com.example.backend.repository.UserRepository;
 import com.example.backend.service.GlobalService;
 import com.example.backend.service.competenciaService.CompetenciaService;
 
@@ -31,13 +33,33 @@ public class CurriculoServiceImpl implements CurriculoService {
     private final GlobalService globalService;
     private final CompetenciaService competenciaService;
     private final CurriculoRepository curriculoRepository;
+    private final UserRepository userRepository;
+
 
     public CurriculoServiceImpl(CompetenciaService competenciaService, CurriculoRepository curriculoRepository,
-            GlobalService globalService, ModelMapper modelMapper) {
+                                GlobalService globalService, ModelMapper modelMapper, UserRepository userRepository) {
         this.competenciaService = competenciaService;
         this.curriculoRepository = curriculoRepository;
         this.globalService = globalService;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    @Transactional
+    public void cadastraCurriculo(CurriculoCadastraReqDto cadastraDto) {
+        var usuario =obterCurriculoUserId(cadastraDto.user());
+        CurriculoModel dado = modelMapper.map(cadastraDto, CurriculoModel.class);
+        var competencias = obterCompetencias(cadastraDto);
+        dado.setCompetencia(competencias);
+        dado.setUser(usuario);
+        curriculoRepository.save(dado);
+    }
+
+    @Override
+    public CurriculoModel obterCurriculoId(Long id) {
+        return curriculoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currículo não encontrado"));
     }
 
     @Override
@@ -57,9 +79,10 @@ public class CurriculoServiceImpl implements CurriculoService {
         return curriculoRepository.save(dadoObtido); // Atualiza no banco
     }
 
+
     @Override
-    public CurriculoModel atualizaCurriculo(Long id, CurriculoAlterarReqDto alterarDto) {
-        var dado = obterCurriculo(alterarDto.id());
+    public CurriculoModel atualizaCurriculo(CurriculoAlterarReqDto alterarDto) {
+        var dado = obterCurriculoId(alterarDto.id());
         atualizaCurriculo(alterarDto, dado);   
         return curriculoRepository.save(dado);
     }
@@ -69,20 +92,6 @@ public class CurriculoServiceImpl implements CurriculoService {
         return curriculoRepository.findAll(pageable)
                 .map(CurriculoListagemResDto::new);
     }
-
-    @Override
-    public CurriculoModel cadastraCurriculo(CurriculoCadastraReqDto cadastraDto) {
-        var validaDadoExistente = curriculoRepository.findByEmail(cadastraDto.email());
-
-        if (validaDadoExistente.isPresent()) {
-            throw new IllegalArgumentException("Currículo já cadastrado para este e-mail.");
-        }
-        var competencias = obterCompetencias(cadastraDto);
-        CurriculoModel dado = modelMapper.map(cadastraDto, CurriculoModel.class);
-        dado.setCompetencia(competencias);
-        return curriculoRepository.save(dado);
-    }
-
 
     @Override
     public List<CurriculoModel> obterListaCurriculo() {
@@ -121,9 +130,9 @@ public class CurriculoServiceImpl implements CurriculoService {
         return dado;
     }
 
-    private CurriculoModel obterCurriculo(Long id) {
-        return curriculoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currículo não encontrado"));
+    private UserModel obterCurriculoUserId(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado"));
     }
 
 }
