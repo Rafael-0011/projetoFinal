@@ -68,44 +68,7 @@ public class CurriculoCotroller {
 
     @PutMapping("/user")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<CurriculoListagemResDto> alteraCurriculo(
-                                                                   @RequestBody @Valid CurriculoAlterarReqDto alterarDto) {
-        return ResponseEntity.ok(new CurriculoListagemResDto(curriculoService.atualizaCurriculo(alterarDto)));
+    public ResponseEntity<CurriculoListagemResDto> alteraCurriculo(@RequestBody @Valid CurriculoAlterarReqDto alterarDto) {
+        return ResponseEntity.ok(new CurriculoListagemResDto(curriculoService.atualizaDadoCurriculo(alterarDto)));
     }
-
-/*
-      @GetMapping("/{email}")
-      public ResponseEntity<CurriculoListagemResDto> obterCurriculo(@PathVariable String email) {
-          return ResponseEntity.ok(new CurriculoListagemResDto(curriculoService.obterCurriculoPeloEmail(email)));
-      }
-
-      @GetMapping
-      public ResponseEntity<?> paginacaoCurriculo(@PageableDefault(size = 10)
-      Pageable pageable) {
-      try {
-
-      var paginacao = curriculoService.paginacaoCurriculo(pageable);
-      return ResponseEntity.ok(paginacao);
-      } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-      body("Erro na paginação: " + e.getMessage());
-      }
-      }
-
-      @GetMapping("/{id}")
-      public ResponseEntity<?> obterCurriculo(@PathVariable Long id) {
-      try {
-
-      var dado = curriculoService.obterCurriculo(id);
-
-      return ResponseEntity.ok(new CurriculoListagemDto(dado));
-      } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro: " +
-      e.getMessage());
-      } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
-      body("Erro ao obter o Formulário");
-      }
-      }
-     */
 }

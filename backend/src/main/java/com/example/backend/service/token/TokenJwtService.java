@@ -45,8 +45,6 @@ public class TokenJwtService {
                 .claim("id", userId)
                 .claim("authorities", authorities)
                 .build();
-
         return encoder.encode(JwtEncoderParameters.from(cleims)).getTokenValue();
     }
-
 }

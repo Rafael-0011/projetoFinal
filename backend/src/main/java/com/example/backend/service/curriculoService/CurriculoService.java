@@ -15,13 +15,9 @@ import com.example.backend.model.CurriculoModel;
 public interface CurriculoService {
     CurriculoModel atualizaStatus(Long id, CurriculoAlterarStatusReqDto alterarDto);
 
-    CurriculoModel atualizaCurriculo(CurriculoAlterarReqDto alterarDto);
-
-    Page<CurriculoListagemResDto> paginacaoCurriculo(Pageable pageable);
+    CurriculoModel atualizaDadoCurriculo(CurriculoAlterarReqDto alterarDto);
 
     void cadastraCurriculo(CurriculoCadastraReqDto cadastraDto);
-
-    CurriculoModel obterCurriculoPeloEmail(String email);
 
     CurriculoModel obterCurriculoId(Long id);
 

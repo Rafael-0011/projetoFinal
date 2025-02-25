@@ -23,18 +23,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel cadastraUser(UserCadastroReqDto userCadastroDto) {
+    public void cadastraUser(UserCadastroReqDto userCadastroDto) {
         UserModel loginDados = modelMapper.map(userCadastroDto, UserModel.class);
         String senhaCriptada = passwordEncoder.encode(loginDados.getPassword());
         loginDados.setPassword(senhaCriptada);
 
-        return userRepository.save(loginDados);
+        userRepository.save(loginDados);
     }
+
     @Override
     public UserModel obterCurriculoPeloIdUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User não encontrado"));
     }
-
-
 }

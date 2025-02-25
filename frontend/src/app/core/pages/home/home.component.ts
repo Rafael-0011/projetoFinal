@@ -13,6 +13,7 @@ import { InputComponent } from '../../../shared/component/input/input.component'
 import { TokenJwt } from '../../../infra/auth/jwt';
 import { UserService } from '../../../infra/service/user.service';
 import { Router } from '@angular/router';
+import { UserProfile } from '../../../module/model/user-profile';
 
 @Component({
   selector: 'app-home',
@@ -92,6 +93,10 @@ export class HomeComponent implements OnInit {
     this.alteraCurriculo();
   }
 
+  cancelar() {
+    this.toggleFormState(false);
+  }
+
   alteraCurriculo(): void {
     const id = this.tokenJwt.getIdFromToken();
     if (this.profileForm.invalid) {
@@ -114,6 +119,7 @@ export class HomeComponent implements OnInit {
           err?.error?.message ||
           'Erro ao atualizar currículo. Tente novamente mais tarde.';
         alert(errorMessage);
+        this.carregarDadosUsuario();
       },
     });
   }
@@ -135,18 +141,7 @@ export class HomeComponent implements OnInit {
             })
         );
 
-        this.profileForm.patchValue({
-          id: response.id,
-          name: response.name,
-          cpf: response.cpf,
-          nascimento: response.nascimento ? new Date(response.nascimento + 'T12:00:00') : null,
-          email: response.email,
-          telefone: response.telefone,
-          escolaridadeEnum: response.escolaridadeEnum,
-          funcao: response.funcao,
-          statusEnum: response.statusEnum || 'AGUARDANDO',
-          competencia: response.competencia || [],
-        });
+        this.profileForm.patchValue({...new UserProfile(response)});
 
         const competenciaArray = this.profileForm.get(
           'competencia'
@@ -162,6 +157,4 @@ export class HomeComponent implements OnInit {
       error: (err) => console.error('Erro ao carregar usuário:', err),
     });
   }
-
-
 }

@@ -5,6 +5,7 @@ import { CadastroUserComponent } from './core/pages/cadastro-user/cadastro-user.
 import { HomeComponent } from './core/pages/home/home.component';
 import { authGuard, authGuardAdmin } from './infra/guard/auth.guard';
 import { CadastroCurriculoComponent } from './core/pages/cadastro-curriculo/cadastro-curriculo.component';
+import { NotFoundComponent } from './core/pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -33,5 +34,10 @@ export const routes: Routes = [
     path: 'homeUser',
     component: HomeComponent,
     canActivate: [authGuard],
+  },
+  
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];

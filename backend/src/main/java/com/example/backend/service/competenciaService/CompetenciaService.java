@@ -22,16 +22,10 @@ public class CompetenciaService {
         CompetenciaModel dados = competenciaRepository.findByCompetenciaEnumAndNivelEnum(
                 competenciaCadastroDto.competenciaEnum(),
                 competenciaCadastroDto.nivelEnum());
-
         if (dados == null) {
             dados = modelMapper.map(competenciaCadastroDto, CompetenciaModel.class);
             competenciaRepository.saveAndFlush(dados);
         }
-
         return dados;
     }
-
-
-
-
 }

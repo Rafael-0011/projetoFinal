@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.backend.config.exceptionHandle.NotFoundException;
 import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarReqDto;
 import com.example.backend.dto.req.CurriculoReqDto.CurriculoAlterarStatusReqDto;
 import com.example.backend.dto.req.CurriculoReqDto.CurriculoCadastraReqDto;
@@ -34,7 +33,6 @@ public class CurriculoServiceImpl implements CurriculoService {
     private final CompetenciaService competenciaService;
     private final CurriculoRepository curriculoRepository;
     private final UserRepository userRepository;
-
 
     public CurriculoServiceImpl(CompetenciaService competenciaService, CurriculoRepository curriculoRepository,
                                 GlobalService globalService, ModelMapper modelMapper, UserRepository userRepository) {
@@ -63,34 +61,18 @@ public class CurriculoServiceImpl implements CurriculoService {
     }
 
     @Override
-    public CurriculoModel obterCurriculoPeloEmail(String email) {
-        return curriculoRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Currículo não encontrado"));
-    }
-
-    @Override
     @Transactional
     public CurriculoModel atualizaStatus(Long id, CurriculoAlterarStatusReqDto alterarDto) {
-        CurriculoModel dadoObtido = curriculoRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Currículo não encontrado"));
-    
+        CurriculoModel dadoObtido = obterCurriculoId(id);
         dadoObtido.setStatusEnum(alterarDto.statusEnum());
-        
-        return curriculoRepository.save(dadoObtido); // Atualiza no banco
+        return curriculoRepository.save(dadoObtido);
     }
 
-
     @Override
-    public CurriculoModel atualizaCurriculo(CurriculoAlterarReqDto alterarDto) {
+    public CurriculoModel atualizaDadoCurriculo(CurriculoAlterarReqDto alterarDto) {
         var dado = obterCurriculoId(alterarDto.id());
-        atualizaCurriculo(alterarDto, dado);   
+        atualizaCurriculo(alterarDto, dado);
         return curriculoRepository.save(dado);
-    }
-
-    @Override
-    public Page<CurriculoListagemResDto> paginacaoCurriculo(Pageable pageable) {
-        return curriculoRepository.findAll(pageable)
-                .map(CurriculoListagemResDto::new);
     }
 
     @Override
@@ -122,17 +104,13 @@ public class CurriculoServiceImpl implements CurriculoService {
     }
 
     private List<CompetenciaModel> obterCompetencias(CurriculoCadastraReqDto cadastraDto) {
-        List<CompetenciaModel> dado = new ArrayList<>();
-        for (CompetenciaCadastroReqDto dto : cadastraDto.competencia()) {
-            CompetenciaModel competencia = competenciaService.findOrCreateCompetencia(dto);
-            dado.add(competencia);
-        }
-        return dado;
+        return cadastraDto.competencia().stream()
+                .map(competenciaService::findOrCreateCompetencia)
+                .toList();
     }
 
     private UserModel obterCurriculoUserId(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario não encontrado"));
     }
-
 }

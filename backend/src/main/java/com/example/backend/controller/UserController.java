@@ -32,5 +32,4 @@ public class UserController {
     public ResponseEntity<CurriculoListagemResDto> obterCurriculoPeloIdUser(@PathVariable Long id) {
         return ResponseEntity.ok(new CurriculoListagemResDto(userService.obterCurriculoPeloIdUser(id).getCurriculo()));
     }
-
 }

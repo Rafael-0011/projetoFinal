@@ -2,7 +2,7 @@ export class UserProfile {
   id: number;
   name: string;
   cpf: string;
-  nascimento: string;
+  nascimento: Date | null;
   email: string;
   telefone: string;
   escolaridadeEnum: string;
@@ -14,7 +14,7 @@ export class UserProfile {
     this.id = data?.id || 0;
     this.name = data?.name || '';
     this.cpf = data?.cpf || '';
-    this.nascimento = data?.nascimento || '';
+    this.nascimento = data?.nascimento ? new Date(data.nascimento + 'T12:00:00') : null;
     this.email = data?.email || '';
     this.telefone = data?.telefone || '';
     this.escolaridadeEnum = data?.escolaridadeEnum || '';

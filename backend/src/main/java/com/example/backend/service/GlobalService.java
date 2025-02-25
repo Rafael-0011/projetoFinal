@@ -11,19 +11,10 @@ import org.springframework.stereotype.Service;
 public class GlobalService {
 
     public <T> void atualizaDados(T valor, Consumer<T> setter) {
-        if (valor != null) {
-            if (valor instanceof String string) {
-                if (!string.isEmpty()) {
-                    setter.accept(valor);
-                }
-            } else if (valor instanceof List) {
-                if (!((List<?>) valor).isEmpty()) {
-                    setter.accept(valor);
-                }
-            } else {
-                setter.accept(valor);
-            }
-        }
+        if (valor == null) return;
+        if (valor instanceof String string && string.isEmpty()) return;
+        if (valor instanceof List<?> list && list.isEmpty()) return;
+        setter.accept(valor);
     }
 
     public static String removeAccents(String str) {
